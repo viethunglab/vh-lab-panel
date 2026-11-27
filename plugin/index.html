@@ -6,42 +6,51 @@
 </head>
 <body>
   <div id="app">
-    <img id="header" src="icons/header.png" alt="VIET HUNG LABS" title="facebook.com/hieuanhviethung">
-
-    <div class="tabs">
-      <button class="tab active" data-tab="tools">TOOLS</button>
-      <button class="tab" data-tab="layout">XẾP ẢNH</button>
-      <button class="tab" data-tab="ghepao">GHÉP ÁO</button>
-    </div>
-
-    <div class="page active" id="page-tools">
-      <div class="grid grid-5" id="grid-top"></div>
-      <div class="grid" id="grid-quick"></div>
-      <div class="grid" id="grid-tools"></div>
-    </div>
-
-    <div class="page" id="page-layout">
-      <div class="grid" id="grid-layout"></div>
-    </div>
-
-    <div class="page" id="page-ghepao">
-      <div class="grid" id="grid-ghepao"></div>
-      <div class="root-box">
-        <div class="root-label">Thư mục dữ liệu:</div>
-        <div id="gaRoot" class="root-path"></div>
-        <button id="gaChangeRoot" class="small">Đổi thư mục…</button>
+    <header class="brand">
+      <div class="mark">VH</div>
+      <div class="brand-text">
+        <div class="brand-name">VH Lab</div>
+        <div class="brand-sub">Viet Hung Labs · 4.0</div>
       </div>
+      <div class="brand-link" id="brandLink" title="facebook.com/hieuanhviethung">Facebook</div>
+    </header>
+
+    <nav class="tabs">
+      <div class="tab active" data-tab="tools">Công cụ</div>
+      <div class="tab" data-tab="layout">Xếp ảnh</div>
+      <div class="tab" data-tab="ghepao">Ghép áo</div>
+    </nav>
+
+    <div class="search">
+      <input id="filter" type="text" placeholder="Tìm công cụ…">
     </div>
 
-    <a id="footer">@VIETHUNGLABS</a>
-    <div id="toast" class="toast"></div>
+    <main class="pages">
+      <div class="page active" id="page-tools"><div class="page-extra"></div></div>
+      <div class="page" id="page-layout"><div class="page-extra"></div></div>
+      <div class="page" id="page-ghepao">
+        <div class="page-extra">
+          <div class="root-box">
+            <div class="section-title">Thư mục dữ liệu</div>
+            <div id="gaRoot" class="root-path"></div>
+            <div class="btn small" id="gaChangeRoot">Đổi thư mục…</div>
+          </div>
+        </div>
+      </div>
+      <div id="empty" class="empty">Không có công cụ phù hợp.</div>
+    </main>
+
+    <footer class="status">
+      <div id="toast" class="toast">Sẵn sàng</div>
+      <div class="status-link" id="statusLink">@viethunglabs</div>
+    </footer>
   </div>
 
   <!-- Hộp thoại thông báo chung -->
   <dialog id="dlgAlert">
     <form method="dialog">
       <div class="msg pre"></div>
-      <footer><button type="button" class="primary" onclick="document.getElementById('dlgAlert').close('ok')">OK</button></footer>
+      <footer><button type="button" class="primary" data-close="ok">OK</button></footer>
     </form>
   </dialog>
 
@@ -64,8 +73,8 @@
       </fieldset>
       <div id="c15Diag" class="pre hint"></div>
       <footer>
-        <button type="button" onclick="document.getElementById('dlgCrop15').close('cancel')">Huỷ</button>
-        <button type="button" class="primary" onclick="document.getElementById('dlgCrop15').close('ok')">Crop 10x15</button>
+        <button type="button" class="btn-secondary" data-close="cancel">Huỷ</button>
+        <button type="button" class="primary" data-close="ok">Crop 10x15</button>
       </footer>
     </form>
   </dialog>
@@ -88,8 +97,8 @@
       <div class="row">Lề trên đỉnh đầu: <input type="number" id="dvMargin" class="num"> %</div>
       <label><input type="checkbox" id="dvClear"> Xoá các đường Guide sau khi crop</label>
       <footer>
-        <button type="button" onclick="document.getElementById('dlgDangVien').close('cancel')">Huỷ</button>
-        <button type="button" class="primary" onclick="document.getElementById('dlgDangVien').close('ok')">Crop ảnh</button>
+        <button type="button" class="btn-secondary" data-close="cancel">Huỷ</button>
+        <button type="button" class="primary" data-close="ok">Crop ảnh</button>
       </footer>
     </form>
   </dialog>
@@ -119,12 +128,12 @@
       <fieldset>
         <legend>3. Tự động lưu JPG (01.jpg, 02.jpg…) và đóng tài liệu</legend>
         <label><input type="checkbox" id="xaAuto"> Bật tự động lưu</label>
-        <div class="row"><span id="xaFolder" class="path"></span><button type="button" id="xaBrowse" class="small">Chọn thư mục…</button></div>
+        <div class="row"><span id="xaFolder" class="path"></span><button type="button" id="xaBrowse" class="btn-secondary small">Chọn thư mục…</button></div>
       </fieldset>
       <div id="xaSummary" class="pre hint"></div>
       <footer>
-        <button type="button" onclick="document.getElementById('dlgXepAnh').close('cancel')">Huỷ</button>
-        <button type="button" class="primary" onclick="document.getElementById('dlgXepAnh').close('ok')">Bắt đầu xếp</button>
+        <button type="button" class="btn-secondary" data-close="cancel">Huỷ</button>
+        <button type="button" class="primary" data-close="ok">Bắt đầu xếp</button>
       </footer>
     </form>
   </dialog>
@@ -136,7 +145,7 @@
       <div id="gaGrid" class="ga-grid"></div>
       <div class="ga-foot">
         <span id="gaStatus" class="hint"></span>
-        <button type="button" onclick="document.getElementById('dlgGallery').close('cancel')">Đóng</button>
+        <button type="button" class="btn-secondary" data-close="cancel">Đóng</button>
       </div>
     </div>
   </dialog>

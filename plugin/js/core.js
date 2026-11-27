@@ -10,9 +10,10 @@ function toast(msg, kind) {
   const el = document.getElementById('toast');
   if (!el) return;
   el.textContent = msg;
-  el.className = 'toast show ' + (kind || '');
+  el.title = msg;
+  el.className = 'toast ' + (kind || 'info');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => { el.className = 'toast'; }, kind === 'error' ? 6000 : 3000);
+  toastTimer = setTimeout(() => { el.className = 'toast'; el.textContent = 'Sẵn sàng'; el.title = ''; }, kind === 'error' ? 8000 : 4000);
 }
 
 function hasDocument() {

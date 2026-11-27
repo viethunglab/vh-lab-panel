@@ -79,7 +79,7 @@ async function openCategory(id) {
 
   async function showSub(sub) {
     const my = ++loadToken;
-    Array.from(tabs.children).forEach((b) => b.classList.toggle('active', b.dataset.name === sub.name));
+    Array.from(tabs.children).forEach((b) => b.classList.toggle('active', b.getAttribute('data-name') === sub.name));
     grid.innerHTML = '';
     status.textContent = 'Đang tải ' + sub.name + '…';
     const dataDir = (await subFolders(dataRoot)).find((d) => d.name.toLowerCase() === sub.name.toLowerCase());
@@ -116,9 +116,9 @@ async function openCategory(id) {
 
   tabs.innerHTML = '';
   for (const s of subs) {
-    const b = document.createElement('button');
+    const b = document.createElement('div');
     b.className = 'ga-tab';
-    b.dataset.name = s.name;
+    b.setAttribute('data-name', s.name);
     b.textContent = s.name;
     b.onclick = () => showSub(s);
     tabs.appendChild(b);
