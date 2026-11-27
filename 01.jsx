@@ -1,9 +1,0 @@
-#target photoshop
-cTID = function(s) { return app.charIDToTypeID(s); };
-sTID = function(s) { return app.stringIDToTypeID(s); };
-
-var typo_url = "~/Documents/[SCP-MY PANEL PRO]/MYTYPO2/01.png";  // url typo for MAC
-var typo_url = "/d/[SCP-MY PANEL PRO]/MYTYPO2/01.png";  // url typo for windows
-
-// THIS CODE DESIGN BY LEE TEO - 17.08.2021
-var _0xe8b4=["\x41\x4C\x4C","\x4E\x4F","\x49\x64\x6E\x74","\x70\x75\x74\x49\x6E\x74\x65\x67\x65\x72","\x6E\x75\x6C\x6C","\x70\x75\x74\x50\x61\x74\x68","\x46\x54\x63\x73","\x51\x43\x53\x74","\x51\x43\x53\x41\x76\x65\x72\x61\x67\x65","\x70\x75\x74\x45\x6E\x75\x6D\x65\x72\x61\x74\x65\x64","\x48\x72\x7A\x6E","\x23\x50\x78\x6C","\x70\x75\x74\x55\x6E\x69\x74\x44\x6F\x75\x62\x6C\x65","\x56\x72\x74\x63","\x4F\x66\x73\x74","\x70\x75\x74\x4F\x62\x6A\x65\x63\x74","\x4C\x6E\x6B\x64","\x70\x75\x74\x42\x6F\x6F\x6C\x65\x61\x6E","\x50\x6C\x63\x20","\x6D\x61\x69\x6E"];function typo(){function _0xf2dcx2(_0xf2dcx3,_0xf2dcx4){if(_0xf2dcx3!= undefined&&  !_0xf2dcx3){return};var _0xf2dcx5=(_0xf2dcx4?DialogModes[_0xe8b4[0]]:DialogModes[_0xe8b4[1]]);var _0xf2dcx6= new ActionDescriptor();_0xf2dcx6[_0xe8b4[3]](cTID(_0xe8b4[2]),5);_0xf2dcx6[_0xe8b4[5]](cTID(_0xe8b4[4]), new File(typo_url));_0xf2dcx6[_0xe8b4[9]](cTID(_0xe8b4[6]),cTID(_0xe8b4[7]),sTID(_0xe8b4[8]));var _0xf2dcx7= new ActionDescriptor();_0xf2dcx7[_0xe8b4[12]](cTID(_0xe8b4[10]),cTID(_0xe8b4[11]),0);_0xf2dcx7[_0xe8b4[12]](cTID(_0xe8b4[13]),cTID(_0xe8b4[11]),0);_0xf2dcx6[_0xe8b4[15]](cTID(_0xe8b4[14]),cTID(_0xe8b4[14]),_0xf2dcx7);_0xf2dcx6[_0xe8b4[17]](cTID(_0xe8b4[16]),true);executeAction(cTID(_0xe8b4[18]),_0xf2dcx6,_0xf2dcx5)}_0xf2dcx2()}typo[_0xe8b4[19]]= function(){typo()};typo[_0xe8b4[19]]()
