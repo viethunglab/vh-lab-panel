@@ -1,0 +1,74 @@
+/* VH Lab Panel – UXP. Lưu ý: UXP không hỗ trợ CSS grid, dùng flex-wrap. */
+body {
+  margin: 0;
+  padding: 4px;
+  background-color: var(--uxp-host-background-color, #1e1e1e);
+  color: var(--uxp-host-text-color, #e3e3e3);
+  font-size: 12px;
+}
+#app { display: flex; flex-direction: column; }
+#header { width: 252px; height: 53px; cursor: pointer; align-self: center; }
+
+.tabs { display: flex; flex-direction: row; margin: 4px 0; }
+.tab {
+  flex: 1; margin: 0 2px; height: 26px;
+  background-color: #5a1010; color: #e3e3e3; border: 1px solid #3a0a0a; border-radius: 2px;
+  font-size: 12px; font-weight: bold;
+}
+.tab.active { background-color: #d01010; }
+
+.page { display: none; flex-direction: column; }
+.page.active { display: flex; }
+
+.grid { display: flex; flex-direction: row; flex-wrap: wrap; margin-bottom: 6px; }
+.cmd {
+  width: 80px; height: 25px; margin: 2px;
+  background-color: #2d2d2d; color: #e3e3e3;
+  border: 1px solid #3c3c3c; border-radius: 2px;
+  font-size: 12px; overflow: hidden;
+}
+.cmd:hover { background-color: #4a4a4a; }
+.grid-5 .cmd { width: 46px; }
+.cmd.accent { color: #f67d07; }
+body.busy .cmd { opacity: 0.6; }
+
+.root-box { display: flex; flex-direction: column; margin-top: 4px; padding: 4px; border: 1px solid #3c3c3c; }
+.root-label { color: #aaaaaa; }
+.root-path { margin: 2px 0 4px 0; word-break: break-all; }
+
+button.small { height: 22px; font-size: 11px; padding: 0 8px; }
+button.primary { background-color: #1473e6; color: #ffffff; }
+
+#footer { margin-top: 8px; text-align: center; color: #888888; cursor: pointer; }
+
+.toast { display: none; margin-top: 6px; padding: 6px; border-radius: 2px; background-color: #333333; }
+.toast.show { display: flex; }
+.toast.error { background-color: #7a1f1f; color: #ffffff; }
+
+/* Hộp thoại */
+dialog form { display: flex; flex-direction: column; }
+dialog fieldset { border: 1px solid #555555; margin: 4px 0; padding: 6px; display: flex; flex-direction: column; }
+dialog legend { color: #bbbbbb; }
+dialog label { margin: 2px 0; }
+dialog footer { display: flex; flex-direction: row; justify-content: flex-end; margin-top: 10px; }
+dialog footer button { margin-left: 8px; min-width: 90px; height: 28px; }
+.row { display: flex; flex-direction: row; align-items: center; margin: 2px 0; }
+.row label { margin-right: 12px; min-width: 110px; }
+.row.indent { margin-left: 20px; }
+.num { width: 60px; margin: 0 4px; }
+.pre { white-space: pre-wrap; }
+.hint { color: #aaaaaa; margin: 4px 0; }
+.path { flex: 1; color: #cccccc; margin-right: 8px; word-break: break-all; }
+#c15Slider { flex: 1; }
+
+/* Thư viện GHÉP ÁO */
+.ga-wrap { display: flex; flex-direction: column; height: 100%; }
+.ga-tabs { display: flex; flex-direction: row; flex-wrap: wrap; margin-bottom: 6px; }
+.ga-tab { margin: 2px; height: 24px; background-color: #2d2d2d; color: #e3e3e3; border: 1px solid #3c3c3c; }
+.ga-tab.active { background-color: #d01010; }
+.ga-grid { flex: 1; display: flex; flex-direction: row; flex-wrap: wrap; overflow-y: scroll; min-height: 420px; }
+.ga-cell { width: 120px; margin: 4px; padding: 2px; border: 1px solid #3c3c3c; cursor: pointer; display: flex; flex-direction: column; align-items: center; }
+.ga-cell:hover { border-color: #f67d07; }
+.ga-cell img { width: 112px; height: 112px; object-fit: contain; background-color: #444444; }
+.ga-cap { font-size: 10px; color: #cccccc; margin-top: 2px; text-align: center; }
+.ga-foot { display: flex; flex-direction: row; justify-content: space-between; align-items: center; margin-top: 6px; }

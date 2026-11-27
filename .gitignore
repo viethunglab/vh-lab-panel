@@ -12,3 +12,7 @@ desktop.ini
 *.bak.jsx
 * - Copy.*
 * - Copy (*).*
+
+# Gói plugin và thư viện tạm
+*.ccx
+node_modules/
