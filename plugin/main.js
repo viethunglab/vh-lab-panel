@@ -126,8 +126,21 @@ document.querySelectorAll('[data-close]').forEach((b) => {
   });
 });
 
+// Cuộn bằng con lăn chuột. Photoshop 27.11+ có lỗi: khi bật Preferences > Tools > "Zoom with Scroll Wheel",
+// panel UXP không tự cuộn (phải giữ Alt). Nếu sự kiện wheel vẫn tới panel mà vùng cuộn không nhúc nhích,
+// tự cuộn bằng tay; nếu Photoshop đã cuộn thì không làm gì để tránh cuộn hai lần.
+function initWheelFallback() {
+  const box = document.getElementById('app');
+  box.addEventListener('wheel', (e) => {
+    const before = box.scrollTop;
+    const dy = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaY;
+    setTimeout(() => { if (box.scrollTop === before) box.scrollTop = before + dy; }, 0);
+  });
+}
+
 render();
 initTabs();
+initWheelFallback();
 gallery.showRoot();
 document.getElementById('gaChangeRoot').addEventListener('click', () => gallery.chooseRoot());
 document.getElementById('brandLink').addEventListener('click', openHome);

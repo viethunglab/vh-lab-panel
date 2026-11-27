@@ -38,8 +38,12 @@ body {
   color: var(--text);
   font-size: var(--fs);
 }
-/* Không dùng vùng cuộn lồng nhau: để panel tự cuộn, con lăn chuột hoạt động bình thường. */
-#app { display: flex; flex-direction: column; }
+/* Panel UXP không tự cuộn: #app phủ kín panel và tự cuộn (cách Adobe khuyên trên diễn đàn nhà phát triển). */
+#app {
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  overflow-y: auto; overflow-x: hidden;
+  display: flex; flex-direction: column;
+}
 
 /* ---------- Thương hiệu ---------- */
 .brand { display: flex; flex-direction: row; align-items: center; padding: 10px 10px 8px 10px; }

@@ -33,7 +33,8 @@ tools/
 - Màu nền, chữ và viền lấy từ theme của Photoshop (Darkest, Dark, Light, Lightest). Chỉ dùng một màu nhấn là vàng champagne: `#d6b06b` khi theme tối, `#9b7432` khi theme sáng.
 - Mỗi tab chia thành các nhóm có tiêu đề nhỏ. Lưới 3 cột. Hàng "Thao tác nhanh" có 5 nút được nhấn mạnh.
 - Dòng trạng thái ngay dưới tab hiện kết quả hoặc lỗi của lệnh vừa chạy, thay cho hộp thông báo bật lên.
-- Toàn panel cuộn bằng con lăn chuột. Không đặt thêm vùng cuộn lồng bên trong (`overflow` trên phần tử con), vì trong Photoshop con lăn không cuộn được vùng đó nếu không giữ Alt.
+- Panel UXP không tự cuộn, nên `#app` được đặt phủ kín panel và tự cuộn bằng `overflow-y: auto`.
+- Từ Photoshop 27.11, nếu bật Preferences → Tools → *Zoom with Scroll Wheel* thì con lăn chuột không cuộn được panel UXP (phải giữ Alt). Đây là lỗi của Photoshop. `main.js` có đoạn tự cuộn dự phòng; nếu đoạn này vẫn không chạy được, tắt tuỳ chọn trên là con lăn cuộn bình thường.
 - Muốn đổi màu nhấn, sửa biến `--accent` trong `css/style.css`.
 
 ## Chạy thử
