@@ -44,9 +44,12 @@ body {
   overflow-y: auto; overflow-x: hidden;
   display: flex; flex-direction: column;
 }
+/* Trong vùng cuộn flex, các khối mặc định bị co lại khi nội dung dài (flex-shrink: 1),
+   làm header cao thấp khác nhau giữa các tab -> cố định không cho co. */
+#app > * { flex-shrink: 0; }
 
 /* ---------- Thương hiệu ---------- */
-.brand { display: flex; flex-direction: row; align-items: center; padding: 10px 10px 8px 10px; }
+.brand { display: flex; flex-direction: row; align-items: center; height: 46px; padding: 0 10px; }
 .mark {
   width: 28px; height: 28px; border-radius: 6px;
   background-color: var(--accent); color: var(--accent-ink);
@@ -60,7 +63,7 @@ body {
 .brand-link:hover { color: var(--accent); background-color: var(--surface); }
 
 /* ---------- Tab ---------- */
-.tabs { display: flex; flex-direction: row; margin: 0 10px; border-bottom: 1px solid var(--line); }
+.tabs { display: flex; flex-direction: row; height: 31px; margin: 0 10px; border-bottom: 1px solid var(--line); }
 .tab {
   flex: 1; display: flex; align-items: center; justify-content: center;
   height: 30px; color: var(--text-2); font-size: 12px; cursor: pointer;
