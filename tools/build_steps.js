@@ -89,7 +89,6 @@ function check(steps, id) {
 const SPEC = {
   // TOOLS – hàng trên
   cameraraw: 'cameraraw.jsx',
-  RT066: () => [{ _obj: 'flattenImage', _options: { dialogOptions: 'silent' } }],
   // Quick Retouch
   Q1: 'quick-retouch/1.jsx', Q2: 'quick-retouch/2.jsx', Q3: 'quick-retouch/3.jsx', Q4: 'quick-retouch/4.jsx',
   Q5: 'quick-retouch/5.jsx', Q6: 'quick-retouch/6.jsx', Q8: 'quick-retouch/8.jsx',

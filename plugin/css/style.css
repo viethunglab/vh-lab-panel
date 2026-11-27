@@ -134,7 +134,7 @@ body.drag-active .cmd:hover { border-color: var(--line); }
 }
 
 /* Hàng thao tác nhanh: 5 nút, nhấn bằng màu chủ đạo */
-.section.quick .cmd { flex: 0 0 18%; padding: 0; background-color: var(--accent-soft); color: var(--accent); }
+.section.quick .cmd { flex: 1 1 auto; padding: 0 8px; background-color: var(--accent-soft); color: var(--accent); }
 .section.quick .cmd-label { font-weight: 600; }
 .section.quick .cmd:hover { border-color: var(--accent); }
 

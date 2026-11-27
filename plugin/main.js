@@ -33,7 +33,7 @@ const PAGES = {
   tools: [
     { style: 'quick', cmds: [
       steps('cameraraw', 'C-Raw'), fn('RT033', 'JPG', () => save.saveCopy('jpg')), fn('RT051', 'PNG', () => save.saveCopy('png')),
-      steps('RT066', 'Gộp'), fn('D41', 'Crop', () => crop.crop10x15()),
+      fn('QDIR', 'Reset Q-Dir', () => external.resetQDir()),
     ] },
     { cmds: [
       steps('Q1', 'Xoay'), steps('Q2', 'Contrast'), steps('Q3', 'Unsharp'), steps('Q4', 'Level'),

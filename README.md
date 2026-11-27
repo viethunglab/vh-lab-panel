@@ -14,6 +14,7 @@ plugin/                 ← thư mục plugin (UDT nạp và đóng gói thư m�
   main.js               danh sách nút → lệnh
   css/style.css
   icons/
+  scripts/              Reset_QDir.bat (nút Reset Q-Dir)
   js/core.js            executeAsModal + batchPlay, gộp History, báo lỗi
   js/files.js           đọc/ghi file, token cho batchPlay
   js/arrange.js         chế độ Sắp xếp: kéo thả đổi vị trí nút, lưu thứ tự
@@ -56,7 +57,7 @@ tools/
 
 ## Đóng gói và cài đặt .ccx
 
-Bản 4.0.0 đã đóng gói sẵn: `dist/com.viethunglabs.vhlabpanel_PS.ccx` (không đưa lên git, xem `.gitignore`).
+Bản mới nhất đã đóng gói sẵn: `dist/com.viethunglabs.vhlabpanel_PS.ccx` (không đưa lên git, xem `.gitignore`).
 File `.ccx` là file nén ZIP của thư mục `plugin/` (manifest.json ở gốc). Có thể tạo lại bằng UDT như dưới đây,
 hoặc nén thẳng nội dung thư mục `plugin/` rồi đổi đuôi thành `.ccx`. Trước mỗi lần phát hành, tăng `version` trong `manifest.json`.
 
@@ -82,7 +83,8 @@ Lệnh mới ghi bằng Photoshop (Actions panel → *Copy As JavaScript*) có t
 |---|---|---|
 | TOOLS | C-Raw, Gộp và các nút chỉnh ảnh, retouch, Ám vàng/đỏ/tím | Tự chuyển từ JSX (`steps.js`) |
 | TOOLS | JPG, PNG | `save.js` |
-| TOOLS | Crop, Đảng viên | `crop.js` |
+| TOOLS | Đảng viên | `crop.js` |
+| TOOLS | Reset Q-Dir | `external.js` chạy `scripts/Reset_QDir.bat` (đóng Q-Dir êm để lưu Tab rồi mở lại; hỗ trợ Q-Dir.exe và Q-Dir_x64.exe) |
 | TOOLS | VISA | `external.js` |
 | XẾP ẢNH | 20 bố cục cố định | Tự chuyển từ JSX. Action trong bộ "Tool" được nhúng thẳng vào lệnh |
 | XẾP ẢNH | Nhiều người | `xepanh.js`, giữ nguyên thuật toán xếp |
@@ -92,7 +94,7 @@ Lệnh mới ghi bằng Photoshop (Actions panel → *Copy As JavaScript*) có t
 
 - Bỏ khoảng 1.300 file không dùng: preset, script cũ, các tab TAB4/TAB5/index2/index3, file `.rar`, bản sao. Bỏ hẳn các nhóm nút đã comment.
 - Bỏ nút **Reset action** (script rỗng) và **Xuất js** (dùng *Copy As JavaScript* của Photoshop thay thế).
-- Theo yêu cầu, bỏ các nút Trắng da, SkinFiner, Tách tóc, Tăng nét 2, Upscale, Lưu jpg, Auto Contrast. Tab Công cụ không chia nhóm, giữ thứ tự nút như bản cũ.
+- Theo yêu cầu, bỏ các nút Trắng da, SkinFiner, Tách tóc, Tăng nét 2, Upscale, Lưu jpg, Auto Contrast, Gộp, Crop (4.0.1: thêm Reset Q-Dir). Tab Công cụ không chia nhóm, giữ thứ tự nút như bản cũ.
 - Các bố cục XẾP ẢNH không cần nạp bộ action "Tool" nữa. Các bước *Màu nền*, *Tạo viền*, *Flatten* được nhúng thẳng vào lệnh.
 - Các bố cục (CP) 1+6, (CP) 0+8, Can phạm, Can phạm 2, 4x(1+2) và 4x(2+0) không cần preset tài liệu "CP"/"CP2" trên máy nữa. Kích thước được ghi thẳng: CP = 12,7 x 8,6 cm, CP2 = 12,7 x 17,8 cm, 300 PPI.
 - **Crop 10x15**: sửa lỗi mở rộng canvas khi khung crop vượt mép trái hoặc mép trên.
