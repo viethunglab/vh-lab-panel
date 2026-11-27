@@ -42,7 +42,7 @@
   <dialog id="dlgAlert">
     <form method="dialog">
       <div class="msg pre"></div>
-      <footer><button type="button" class="primary" data-close="ok">OK</button></footer>
+      <footer><div class="dbtn primary" tabindex="0" data-close="ok">OK</div></footer>
     </form>
   </dialog>
 
@@ -65,8 +65,8 @@
       </fieldset>
       <div id="c15Diag" class="pre hint"></div>
       <footer>
-        <button type="button" class="btn-secondary" data-close="cancel">Huỷ</button>
-        <button type="button" class="primary" data-close="ok">Crop 10x15</button>
+        <div class="dbtn" tabindex="0" data-close="cancel">Huỷ</div>
+        <div class="dbtn primary" tabindex="0" data-close="ok">Crop 10x15</div>
       </footer>
     </form>
   </dialog>
@@ -89,8 +89,8 @@
       <div class="row">Lề trên đỉnh đầu: <input type="number" id="dvMargin" class="num"> %</div>
       <label><input type="checkbox" id="dvClear"> Xoá các đường Guide sau khi crop</label>
       <footer>
-        <button type="button" class="btn-secondary" data-close="cancel">Huỷ</button>
-        <button type="button" class="primary" data-close="ok">Crop ảnh</button>
+        <div class="dbtn" tabindex="0" data-close="cancel">Huỷ</div>
+        <div class="dbtn primary" tabindex="0" data-close="ok">Crop ảnh</div>
       </footer>
     </form>
   </dialog>
@@ -120,12 +120,12 @@
       <fieldset>
         <legend>3. Tự động lưu JPG (01.jpg, 02.jpg…) và đóng tài liệu</legend>
         <label><input type="checkbox" id="xaAuto"> Bật tự động lưu</label>
-        <div class="row"><span id="xaFolder" class="path"></span><button type="button" id="xaBrowse" class="btn-secondary small">Chọn thư mục…</button></div>
+        <div class="row"><span id="xaFolder" class="path"></span><div class="dbtn small" tabindex="0" id="xaBrowse">Chọn thư mục…</div></div>
       </fieldset>
       <div id="xaSummary" class="pre hint"></div>
       <footer>
-        <button type="button" class="btn-secondary" data-close="cancel">Huỷ</button>
-        <button type="button" class="primary" data-close="ok">Bắt đầu xếp</button>
+        <div class="dbtn" tabindex="0" data-close="cancel">Huỷ</div>
+        <div class="dbtn primary" tabindex="0" data-close="ok">Bắt đầu xếp</div>
       </footer>
     </form>
   </dialog>
@@ -137,7 +137,7 @@
       <div id="gaGrid" class="ga-grid"></div>
       <div class="ga-foot">
         <span id="gaStatus" class="hint"></span>
-        <button type="button" class="btn-secondary" data-close="cancel">Đóng</button>
+        <div class="dbtn" tabindex="0" data-close="cancel">Đóng</div>
       </div>
     </div></div>
   </dialog>

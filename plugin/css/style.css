@@ -132,12 +132,20 @@ dialog { background-color: var(--bg); color: var(--text); }
 dialog form { display: flex; flex-direction: column; width: 100%; }
 dialog fieldset { border: 1px solid var(--line); border-radius: var(--radius); margin: 5px 0; padding: 8px 10px; display: flex; flex-direction: column; }
 dialog legend { color: var(--text-2); font-size: 11px; padding: 0 4px; }
-dialog label { margin: 3px 0; flex-wrap: nowrap; }
+dialog label { margin: 3px 0; flex-wrap: nowrap; color: var(--text); }
 dialog footer { display: flex; flex-direction: row; justify-content: flex-end; margin-top: 12px; }
-dialog footer button { margin-left: 8px; min-width: 96px; height: 28px; }
-button.primary { background-color: var(--accent); color: var(--accent-ink); border: none; border-radius: var(--radius); font-weight: 600; }
-button.btn-secondary { background-color: transparent; color: var(--text); border: 1px solid var(--line); border-radius: var(--radius); }
-button.small { height: 24px; font-size: 11px; padding: 0 10px; }
+/* Nút trong hộp thoại: dùng div để tự định dạng hoàn toàn (thẻ <button> của UXP có viền/khung focus riêng). */
+.dbtn {
+  display: flex; align-items: center; justify-content: center;
+  min-width: 96px; height: 28px; padding: 0 14px; margin-left: 8px;
+  border-radius: var(--radius); border: 1px solid var(--line);
+  background-color: var(--surface); color: var(--text); font-size: 12px; cursor: pointer;
+}
+.dbtn:hover { background-color: var(--surface-hover); }
+.dbtn.primary { background-color: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
+.dbtn.primary:hover { border-color: var(--text); }
+.dbtn.small { min-width: 0; height: 24px; font-size: 11px; padding: 0 10px; }
+.dbtn.disabled { opacity: 0.4; cursor: default; }
 .row { display: flex; flex-direction: row; align-items: center; margin: 3px 0; }
 .row label { margin-right: 12px; min-width: 110px; }
 .row.indent { margin-left: 22px; }

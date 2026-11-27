@@ -223,7 +223,7 @@ async function askConfig() {
     ids.forEach((t) => { $('#xaQty' + t).disabled = !$('#xaCb' + t).checked; });
     $('#xaCrop').disabled = !$('#xaCb3x4').checked;
     $('#xaFolder').textContent = $('#xaAuto').checked ? (folderOf() || '(chọn thư mục lưu)') : '(không tự lưu)';
-    $('#xaBrowse').disabled = !$('#xaAuto').checked;
+    $('#xaBrowse').classList.toggle('disabled', !$('#xaAuto').checked);
     const parts = [];
     if ($('#xaCbFull').checked) parts.push(n('Full') + ' nguyên khổ');
     ['4x6', '3x4', '2x3'].forEach((t) => { if ($('#xaCb' + t).checked) parts.push(n(t) + ' ảnh ' + t); });
@@ -238,6 +238,7 @@ async function askConfig() {
     $('#xaP' + k).onclick = () => { Object.keys(PAPERS).forEach((o) => { $('#xaP' + o).checked = (o === k); }); refresh(); };
   });
   $('#xaBrowse').onclick = async () => {
+    if ($('#xaBrowse').classList.contains('disabled')) return;
     const f = await lfs.getFolder();
     if (!f) return;
     const isPaperDir = Object.keys(PAPERS).includes(f.name.toUpperCase());

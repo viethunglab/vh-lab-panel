@@ -61,7 +61,8 @@ function errorOf(result) {
   if (!result) return null;
   const r = Array.isArray(result) ? result[0] : result;
   if (r && r._obj === 'error') {
-    const e = new Error(r.message || ('Lỗi Photoshop ' + r.result));
+    const cancel = r.result === USER_CANCEL;
+    const e = new Error(cancel ? 'USER_CANCEL' : (r.message || ('Lỗi Photoshop ' + r.result)));
     e.number = r.result;
     return e;
   }
@@ -118,11 +119,14 @@ async function runModal(name, fn, opts) {
     }, { commandName: name });
     return true;
   } catch (e) {
-    if (e && (e.number === USER_CANCEL || /cancel/i.test(String(e.message)))) {
+    // Người dùng bấm Cancel trong hộp thoại của Photoshop (mã -128): không coi là lỗi.
+    // executeAsModal có thể bọc lại lỗi nên kiểm tra cả nội dung thông báo.
+    const text = String((e && e.message) || e);
+    if (e && (e.number === USER_CANCEL || /USER_CANCEL|-128|cancel/i.test(text))) {
       toast('Đã huỷ: ' + name);
     } else {
       console.error(name, e);
-      toast(name + ' – lỗi: ' + (e && e.message ? e.message : e), 'error');
+      toast(name + ' – lỗi: ' + text.replace(/^Error:\s*/, ''), 'error');
     }
     return false;
   }
