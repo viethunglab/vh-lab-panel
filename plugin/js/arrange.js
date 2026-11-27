@@ -1,6 +1,6 @@
 // Chế độ "Sắp xếp": kéo thả để đổi vị trí nút trong từng nhóm; lưu thứ tự trên máy (localStorage).
 // Không dùng HTML5 drag & drop (trong UXP các sự kiện dragover/drop không chạy ổn định) mà tự xử lý chuột:
-// nhấn giữ -> di chuyển quá 4 px thì bắt đầu kéo -> nút đi theo vị trí con trỏ ngay trong lưới -> nhả chuột để lưu.
+// nhấn giữ -> di chuyển quá 4 px thì bắt đầu kéo -> ô trống dời theo con trỏ, các nút dồn/giãn -> nhả chuột để lưu.
 'use strict';
 
 const ORDER_KEY = 'vhlab.order.v1';
@@ -47,44 +47,54 @@ function setArranging(on) {
   arranging = on;
   document.body.classList.toggle('arranging', on);
   const btn = document.getElementById('btnArrange');
-  if (btn) btn.textContent = on ? 'Xong' : 'Sắp xếp';
+  if (btn) btn.title = on ? 'Xong – thoát chế độ sắp xếp' : 'Sắp xếp nút (kéo thả để đổi vị trí)';
 }
 
 // ---------------- Kéo thả ----------------
+// Cách làm: khi bắt đầu kéo, ghi lại vị trí các "ô" (slot) của lưới. Vì các ô cùng kích thước và lưới không đổi,
+// vị trí ô cố định trong suốt lần kéo -> chỉ số ô đích tính ổn định, không nhảy qua lại.
+// Nút đang kéo để lại một ô trống (viền đứt) tại vị trí sẽ thả; các nút khác dồn/giãn từng ô theo thứ tự đọc.
+// Một bản sao mờ của nút đi theo con trỏ.
 const hasPointer = typeof window.PointerEvent !== 'undefined';
 const EV = hasPointer
   ? { down: 'pointerdown', move: 'pointermove', up: 'pointerup', cancel: 'pointercancel' }
   : { down: 'mousedown', move: 'mousemove', up: 'mouseup', cancel: 'mouseleave' };
 
-let drag = null; // { el, grid, startX, startY, active, lastX, lastY, timer }
+let drag = null;
 
-function cellUnder(grid, x, y, except) {
-  let best = null;
-  let bestD = Infinity;
-  for (const el of Array.from(grid.children)) {
-    if (el === except) continue;
-    const r = el.getBoundingClientRect();
-    if (x >= r.left && x <= r.right && y >= r.top && y <= r.bottom) return { el, r };
-    const cx = Math.max(r.left, Math.min(x, r.right));
-    const cy = Math.max(r.top, Math.min(y, r.bottom));
-    const d = (cx - x) * (cx - x) + (cy - y) * (cy - y);
-    if (d < bestD) { bestD = d; best = { el, r }; }
+function slotIndexAt(x, y) {
+  const g = drag.grid.getBoundingClientRect();
+  const lx = x - g.left;
+  const ly = y - g.top;
+  // Ô chứa con trỏ; nếu con trỏ ở khe giữa các ô thì giữ nguyên chỉ số hiện tại (tránh nhấp nháy).
+  for (let i = 0; i < drag.slots.length; i++) {
+    const r = drag.slots[i];
+    if (lx >= r.left && lx <= r.right && ly >= r.top && ly <= r.bottom) return i;
   }
-  return best;
+  const first = drag.slots[0];
+  const last = drag.slots[drag.slots.length - 1];
+  if (ly < first.top) return 0;
+  if (ly > last.bottom) return drag.slots.length - 1;
+  return drag.index;
 }
 
-function moveTo(x, y) {
-  const { el, grid } = drag;
-  const hit = cellUnder(grid, x, y, el);
-  if (!hit) return;
-  const r = hit.r;
-  // Trước hay sau ô đích: theo nửa trái/phải; nếu con trỏ ở hẳn trên/dưới hàng đó thì theo trên/dưới.
-  let after;
-  if (y < r.top) after = false;
-  else if (y > r.bottom) after = true;
-  else after = x > r.left + r.width / 2;
-  const ref = after ? hit.el.nextSibling : hit.el;
-  if (ref !== el && el.nextSibling !== ref) grid.insertBefore(el, ref);
+function placeAt(index) {
+  if (index === drag.index) return;
+  const others = Array.from(drag.grid.children).filter((c) => c !== drag.el);
+  drag.grid.insertBefore(drag.el, others[index] || null);
+  drag.index = index;
+}
+
+function moveGhost(x, y) {
+  const box = document.getElementById('app');
+  const b = box.getBoundingClientRect();
+  drag.ghost.style.left = (x - b.left + box.scrollLeft - drag.offX) + 'px';
+  drag.ghost.style.top = (y - b.top + box.scrollTop - drag.offY) + 'px';
+}
+
+function update(x, y) {
+  moveGhost(x, y);
+  placeAt(slotIndexAt(x, y));
 }
 
 function autoScroll() {
@@ -95,9 +105,34 @@ function autoScroll() {
   if (drag.lastY < r.top + EDGE) dy = -SCROLL_STEP;
   else if (drag.lastY > r.bottom - EDGE) dy = SCROLL_STEP;
   if (dy) {
-    box.scrollTop += dy;
-    moveTo(drag.lastX, drag.lastY);
+    const before = box.scrollTop;
+    box.scrollTop = before + dy;
+    if (box.scrollTop !== before) update(drag.lastX, drag.lastY);
   }
+}
+
+function startDrag() {
+  const { el, grid } = drag;
+  const g = grid.getBoundingClientRect();
+  drag.slots = Array.from(grid.children).map((c) => {
+    const r = c.getBoundingClientRect();
+    return { left: r.left - g.left, top: r.top - g.top, right: r.right - g.left, bottom: r.bottom - g.top };
+  });
+  drag.index = Array.from(grid.children).indexOf(el);
+  const r = el.getBoundingClientRect();
+  drag.offX = drag.startX - r.left;
+  drag.offY = drag.startY - r.top;
+  const ghost = el.cloneNode(true);
+  ghost.removeAttribute('id');
+  ghost.classList.add('drag-ghost');
+  ghost.style.width = r.width + 'px';
+  ghost.style.height = r.height + 'px';
+  document.getElementById('app').appendChild(ghost);
+  drag.ghost = ghost;
+  el.classList.add('dragging');
+  document.body.classList.add('drag-active');
+  drag.active = true;
+  drag.timer = setInterval(autoScroll, 30);
 }
 
 function onDown(e) {
@@ -119,12 +154,9 @@ function onMove(e) {
   drag.lastY = e.clientY;
   if (!drag.active) {
     if (Math.abs(e.clientX - drag.startX) < DRAG_THRESHOLD && Math.abs(e.clientY - drag.startY) < DRAG_THRESHOLD) return;
-    drag.active = true;
-    drag.el.classList.add('dragging');
-    document.body.classList.add('drag-active');
-    drag.timer = setInterval(autoScroll, 30);
+    startDrag();
   }
-  moveTo(e.clientX, e.clientY);
+  update(e.clientX, e.clientY);
   e.preventDefault();
 }
 
@@ -133,6 +165,7 @@ function onUp() {
   const d = drag;
   drag = null;
   if (d.timer) clearInterval(d.timer);
+  if (d.ghost && d.ghost.parentNode) d.ghost.parentNode.removeChild(d.ghost);
   d.el.classList.remove('dragging');
   document.body.classList.remove('drag-active');
   if (d.active) saveGrid(d.grid);

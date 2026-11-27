@@ -36,7 +36,7 @@ tools/
 - Lệnh lỗi sẽ hiện hộp thoại báo lỗi. Lệnh chạy xong không hiện thông báo (chỉ ghi ra console, xem trong UDT → Debug).
 - Panel UXP không tự cuộn, nên `#app` được đặt phủ kín panel và tự cuộn bằng `overflow-y: auto`.
 - Từ Photoshop 27.11, nếu bật Preferences → Tools → *Zoom with Scroll Wheel* thì con lăn chuột không cuộn được panel UXP (phải giữ Alt). Đây là lỗi của Photoshop. `main.js` có đoạn tự cuộn dự phòng; nếu đoạn này vẫn không chạy được, tắt tuỳ chọn trên là con lăn cuộn bình thường.
-- **Sắp xếp nút:** bấm "Sắp xếp" ở góc trên để vào chế độ sắp xếp, kéo nút tới vị trí mới (chỉ trong cùng nhóm), bấm "Xong" để thoát. Trong chế độ này bấm nút không chạy lệnh. Thứ tự lưu trên từng máy (localStorage); "Khôi phục mặc định" trả về thứ tự gốc. Mã nằm ở `js/arrange.js` (tự xử lý sự kiện chuột vì kéo thả HTML5 không chạy ổn định trong UXP).
+- **Sắp xếp nút:** bấm biểu tượng sáu chấm ở góc trên để vào chế độ sắp xếp, kéo nút tới vị trí mới (chỉ trong cùng nhóm; ô viền đứt là chỗ sẽ thả, các nút khác dồn/giãn theo thứ tự), bấm biểu tượng dấu tích để thoát. Trong chế độ này bấm nút không chạy lệnh. Thứ tự lưu trên từng máy (localStorage); "Khôi phục mặc định" trả về thứ tự gốc. Mã nằm ở `js/arrange.js` (tự xử lý sự kiện chuột vì kéo thả HTML5 không chạy ổn định trong UXP).
 - Muốn đổi màu nhấn, sửa biến `--accent` trong `css/style.css`.
 
 ## Chạy thử

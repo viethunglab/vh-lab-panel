@@ -101,8 +101,20 @@ body.busy .cmd { opacity: 0.55; }
 body.busy .cmd.running { opacity: 1; }
 
 /* ---------- Chế độ Sắp xếp ---------- */
-#btnArrange { margin-right: 2px; }
-body.arranging #btnArrange { color: var(--accent-ink); background-color: var(--accent); font-weight: 600; }
+/* Nút biểu tượng ở góc trên: chấm kéo (bình thường) / dấu tích (đang sắp xếp) */
+.icon-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; margin-right: 4px; border-radius: 4px; cursor: pointer;
+}
+.icon-btn:hover { background-color: var(--surface-hover); }
+.icon-btn svg { fill: var(--text-2); stroke: var(--text-2); }
+.icon-btn .ic-grip { stroke: none; }
+.icon-btn .ic-done { display: none; fill: none; }
+.icon-btn:hover svg { fill: var(--text); }
+.icon-btn:hover .ic-done { fill: none; }
+body.arranging #btnArrange { background-color: var(--accent); }
+body.arranging #btnArrange .ic-grip { display: none; }
+body.arranging #btnArrange .ic-done { display: flex; stroke: var(--accent-ink); }
 .arrange-bar {
   display: none; flex-direction: row; align-items: center; justify-content: space-between;
   height: 28px; margin: 8px 10px 0 10px; padding: 0 8px; border-radius: var(--radius);
@@ -113,8 +125,15 @@ body.arranging .arrange-bar { display: flex; }
 .arrange-reset:hover { color: var(--text); }
 body.arranging .cmd { border: 1px dashed var(--line); cursor: move; }
 body.arranging .cmd:hover { border-color: var(--accent); }
-body.arranging .cmd.dragging { opacity: 0.35; border: 1px dashed var(--accent); }
+/* Ô trống tại vị trí sẽ thả */
+body.arranging .cmd.dragging { background-color: transparent; border: 1px dashed var(--accent); }
+body.arranging .cmd.dragging .cmd-label { opacity: 0; }
 body.drag-active .cmd:hover { border-color: var(--line); }
+/* Bản sao đi theo con trỏ */
+.drag-ghost {
+  position: absolute; margin: 0; pointer-events: none; opacity: 0.85;
+  border: 1px solid var(--accent) !important; background-color: var(--surface-hover);
+}
 
 /* Hàng thao tác nhanh: 5 nút, nhấn bằng màu chủ đạo */
 .section.quick .cmd { flex: 0 0 18%; padding: 0; background-color: var(--accent-soft); color: var(--accent); }
