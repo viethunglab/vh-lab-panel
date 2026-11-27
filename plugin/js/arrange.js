@@ -183,4 +183,4 @@ function init({ onReset }) {
   });
 }
 
-module.exports = { init, applyOrder, isArranging };
+module.exports = { init, applyOrder, isArranging, resetOrders };

@@ -34,7 +34,10 @@ async function chooseRoot() {
   if (!f) return;
   setRoot(f.nativePath);
   showRoot();
-  toast('Thư mục GHÉP ÁO: ' + f.nativePath);
+}
+function resetRoot() {
+  try { localStorage.removeItem(ROOT_KEY); } catch (e) { /* bỏ qua */ }
+  showRoot();
 }
 function showRoot() { const el = $('#gaRoot'); if (el) el.textContent = getRoot(); }
 
@@ -79,7 +82,7 @@ async function openCategory(id) {
   const root = getRoot();
   const base = await entryAt(root + '\\' + cat.folder);
   if (!base) {
-    await alertBox('Không tìm thấy thư mục:\n' + root + '\\' + cat.folder + '\n\nBấm "Đổi thư mục" ở tab GHÉP ÁO để chọn thư mục DATA.', 'GHÉP ÁO');
+    await alertBox('Không tìm thấy thư mục:\n' + root + '\\' + cat.folder + '\n\nMở Cài đặt (biểu tượng bánh răng) để chọn thư mục dữ liệu Ghép áo.', 'GHÉP ÁO');
     return;
   }
   const viewRoot = await entryAt(root + '\\' + cat.folder + '\\VIEW\\DU LIEU');
@@ -151,4 +154,4 @@ async function openCategory(id) {
   if (r === 'place' && chosen) await useFile(chosen);
 }
 
-module.exports = { CATEGORIES, openCategory, chooseRoot, showRoot, getRoot };
+module.exports = { CATEGORIES, openCategory, chooseRoot, resetRoot, showRoot, getRoot };

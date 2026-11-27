@@ -17,6 +17,7 @@ plugin/                 ← thư mục plugin (UDT nạp và đóng gói thư m�
   js/core.js            executeAsModal + batchPlay, gộp History, báo lỗi
   js/files.js           đọc/ghi file, token cho batchPlay
   js/arrange.js         chế độ Sắp xếp: kéo thả đổi vị trí nút, lưu thứ tự
+  js/settings.js        Cài đặt: theme, kích thước nút, hành vi khi chạy lệnh
   js/steps.js           TỰ SINH: lệnh batchPlay chuyển từ script JSX cũ
   js/features/
     save.js             JPG, PNG
@@ -37,7 +38,14 @@ tools/
 - Panel UXP không tự cuộn, nên `#app` được đặt phủ kín panel và tự cuộn bằng `overflow-y: auto`.
 - Từ Photoshop 27.11, nếu bật Preferences → Tools → *Zoom with Scroll Wheel* thì con lăn chuột không cuộn được panel UXP (phải giữ Alt). Đây là lỗi của Photoshop. `main.js` có đoạn tự cuộn dự phòng; nếu đoạn này vẫn không chạy được, tắt tuỳ chọn trên là con lăn cuộn bình thường.
 - **Sắp xếp nút:** bấm biểu tượng sáu chấm ở góc trên để vào chế độ sắp xếp, kéo nút tới vị trí mới (chỉ trong cùng nhóm; ô viền đứt là chỗ sẽ thả, các nút khác dồn/giãn theo thứ tự), bấm biểu tượng dấu tích để thoát. Trong chế độ này bấm nút không chạy lệnh. Thứ tự lưu trên từng máy (localStorage); "Khôi phục mặc định" trả về thứ tự gốc. Mã nằm ở `js/arrange.js` (tự xử lý sự kiện chuột vì kéo thả HTML5 không chạy ổn định trong UXP).
-- Muốn đổi màu nhấn, sửa biến `--accent` trong `css/style.css`.
+- **Cài đặt** (biểu tượng bánh răng ở góc trên):
+  - Màu chủ đạo: Champagne (mặc định), Đại dương, Ngọc bích, Hồng phấn, Oải hương, Đỏ VH, Than chì. Mỗi theme có màu riêng cho giao diện sáng và tối của Photoshop.
+  - Kích thước nút: Thường / Gọn.
+  - Thư mục dữ liệu Ghép áo (Đổi thư mục… / Mặc định).
+  - Khi chạy lệnh: gộp mỗi lần bấm thành 1 bước History; ẩn thanh tiến trình của Photoshop.
+  - Khôi phục thứ tự nút mặc định; link Facebook.
+  - Mọi cài đặt lưu trên từng máy (localStorage) và áp dụng ngay.
+- Thêm theme mới: thêm một dòng vào `THEMES` trong `js/settings.js` và một cặp quy tắc `body.theme-<id>` (tối/sáng) trong `css/style.css`.
 
 ## Chạy thử
 

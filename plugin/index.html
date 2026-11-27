@@ -22,7 +22,12 @@
           <path d="M2.5 7.5 L5.5 10.5 L11.5 3.5" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </div>
-      <div class="brand-link" id="brandLink" title="facebook.com/hieuanhviethung">Facebook</div>
+      <div class="icon-btn" id="btnSettings" title="Cài đặt">
+        <svg class="ic-gear" width="15" height="15" viewBox="0 0 16 16">
+          <path d="M6.9 1 L9.1 1 L9.5 2.9 L10.9 3.5 L12.5 2.4 L14 3.9 L12.9 5.5 L13.5 6.9 L15.4 7.3 L15.4 9.5 L13.5 9.9 L12.9 11.3 L14 12.9 L12.5 14.4 L10.9 13.3 L9.5 13.9 L9.1 15.8 L6.9 15.8 L6.5 13.9 L5.1 13.3 L3.5 14.4 L2 12.9 L3.1 11.3 L2.5 9.9 L0.6 9.5 L0.6 7.3 L2.5 6.9 L3.1 5.5 L2 3.9 L3.5 2.4 L5.1 3.5 L6.5 2.9 Z"/>
+          <circle class="hole" cx="8" cy="8.4" r="2.6"/>
+        </svg>
+      </div>
     </header>
 
     <nav class="tabs">
@@ -42,11 +47,6 @@
       <div class="page" id="page-layout"><div class="page-extra"></div></div>
       <div class="page" id="page-ghepao">
         <div class="page-extra">
-          <div class="root-box">
-            <div class="section-title">Thư mục dữ liệu</div>
-            <div id="gaRoot" class="root-path"></div>
-            <div class="btn small" id="gaChangeRoot">Đổi thư mục…</div>
-          </div>
         </div>
       </div>
     </div>
@@ -142,6 +142,48 @@
         <div class="dbtn" tabindex="0" data-close="cancel">Huỷ</div>
         <div class="dbtn primary" tabindex="0" data-close="ok">Bắt đầu xếp</div>
       </footer>
+    </form>
+  </dialog>
+
+  <!-- Cài đặt -->
+  <dialog id="dlgSettings">
+    <form method="dialog">
+      <div class="set-section">
+        <div class="set-title">Giao diện</div>
+        <div class="set-label">Màu chủ đạo</div>
+        <div id="setThemes" class="swatches"></div>
+        <div class="set-row">
+          <span>Kích thước nút</span>
+          <div class="seg">
+            <div class="seg-opt" data-density="normal">Thường</div>
+            <div class="seg-opt" data-density="compact">Gọn</div>
+          </div>
+        </div>
+      </div>
+      <div class="set-section">
+        <div class="set-title">Ghép áo</div>
+        <div class="set-label">Thư mục dữ liệu</div>
+        <div id="gaRoot" class="root-path"></div>
+        <div class="row">
+          <div class="dbtn small first" tabindex="0" id="gaChangeRoot">Đổi thư mục…</div>
+          <div class="dbtn small" tabindex="0" id="gaResetRoot">Mặc định</div>
+        </div>
+      </div>
+      <div class="set-section">
+        <div class="set-title">Khi chạy lệnh</div>
+        <label><input type="checkbox" id="setHistory"> Gộp mỗi lần bấm thành 1 bước History</label>
+        <label><input type="checkbox" id="setInteractive"> Ẩn thanh tiến trình của Photoshop</label>
+      </div>
+      <div class="set-section">
+        <div class="set-title">Sắp xếp nút</div>
+        <div class="row"><div class="dbtn small first" tabindex="0" id="setResetOrder">Khôi phục thứ tự mặc định</div></div>
+      </div>
+      <div class="set-section">
+        <div class="set-title">Thông tin</div>
+        <div class="hint">VH Lab Panel 4.0 · Viet Hung Labs</div>
+        <div class="set-link" id="setFacebook">facebook.com/hieuanhviethung</div>
+      </div>
+      <footer><div class="dbtn primary" tabindex="0" data-close="ok">Xong</div></footer>
     </form>
   </dialog>
 

@@ -1,6 +1,7 @@
 // Lõi dùng chung: chạy lệnh trong executeAsModal, gọi batchPlay từng bước, báo lỗi/thông báo.
 'use strict';
 const { app, core, action } = require('photoshop');
+const settings = require('./settings');
 
 const USER_CANCEL = -128;
 
@@ -97,7 +98,12 @@ async function get(target) {
 // interactive=true (mặc định): không hiện thanh tiến trình chặn màn hình của Photoshop (bình thường hiện khi lệnh
 // chạy quá ~2 giây) – cần vì nhiều lệnh chờ người dùng thao tác: công cụ Crop, Color Picker, hộp thoại filter.
 async function runModal(name, fn, opts) {
-  const options = Object.assign({ history: true, interactive: true }, opts || {});
+  const o = opts || {};
+  const options = {
+    // Lệnh nào tự tắt history (XẾP ẢNH tạo/đóng tài liệu) thì giữ tắt; còn lại theo Cài đặt.
+    history: o.history !== false && settings.get('history') !== false,
+    interactive: o.interactive !== undefined ? o.interactive : settings.get('interactive') !== false,
+  };
   try {
     await core.executeAsModal(async (ctx) => {
       let hid = null;

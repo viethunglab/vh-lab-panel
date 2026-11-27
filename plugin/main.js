@@ -9,6 +9,8 @@ const xepanh = require('./js/features/xepanh');
 const gallery = require('./js/features/gallery');
 const external = require('./js/features/external');
 const arrange = require('./js/arrange');
+const settings = require('./js/settings');
+const { showDialog } = require('./js/core');
 
 const HOME_URL = 'https://www.facebook.com/hieuanhviethung';
 
@@ -142,6 +144,48 @@ render();
 arrange.init({ onReset: render });
 initTabs();
 initWheelFallback();
-gallery.showRoot();
-document.getElementById('gaChangeRoot').addEventListener('click', () => gallery.chooseRoot());
-document.getElementById('brandLink').addEventListener('click', openHome);
+// ---------------- Cài đặt ----------------
+function refreshSettingsUI() {
+  const s = settings.load();
+  document.querySelectorAll('#setThemes .swatch').forEach((el) => el.classList.toggle('active', el.getAttribute('data-theme') === s.theme));
+  document.querySelectorAll('.seg-opt').forEach((el) => el.classList.toggle('active', el.getAttribute('data-density') === s.density));
+  document.getElementById('setHistory').checked = s.history !== false;
+  document.getElementById('setInteractive').checked = s.interactive !== false;
+  gallery.showRoot();
+}
+
+function initSettings() {
+  const box = document.getElementById('setThemes');
+  for (const t of settings.THEMES) {
+    const el = document.createElement('div');
+    el.className = 'swatch';
+    el.setAttribute('data-theme', t.id);
+    el.title = t.name;
+    const dot = document.createElement('div');
+    dot.className = 'swatch-dot';
+    dot.style.backgroundColor = t.dark;
+    const name = document.createElement('div');
+    name.className = 'swatch-name';
+    name.textContent = t.name;
+    el.appendChild(dot);
+    el.appendChild(name);
+    el.addEventListener('click', () => { settings.set('theme', t.id); refreshSettingsUI(); });
+    box.appendChild(el);
+  }
+  document.querySelectorAll('.seg-opt').forEach((el) => {
+    el.addEventListener('click', () => { settings.set('density', el.getAttribute('data-density')); refreshSettingsUI(); });
+  });
+  document.getElementById('setHistory').addEventListener('change', (e) => settings.set('history', e.target.checked));
+  document.getElementById('setInteractive').addEventListener('change', (e) => settings.set('interactive', e.target.checked));
+  document.getElementById('gaChangeRoot').addEventListener('click', () => gallery.chooseRoot());
+  document.getElementById('gaResetRoot').addEventListener('click', () => gallery.resetRoot());
+  document.getElementById('setResetOrder').addEventListener('click', () => { arrange.resetOrders(); render(); });
+  document.getElementById('setFacebook').addEventListener('click', openHome);
+  document.getElementById('btnSettings').addEventListener('click', async () => {
+    refreshSettingsUI();
+    await showDialog('dlgSettings', 'Cài đặt VH Lab', { width: 420, height: 640 });
+  });
+}
+
+settings.apply();
+initSettings();

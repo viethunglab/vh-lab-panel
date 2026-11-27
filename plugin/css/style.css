@@ -60,8 +60,6 @@ body {
 .brand-text { display: flex; flex-direction: column; flex: 1; margin-left: 9px; }
 .brand-name { font-size: 14px; font-weight: 600; letter-spacing: 0.3px; }
 .brand-sub { font-size: 10px; color: var(--text-2); margin-top: 1px; }
-.brand-link { font-size: 10px; color: var(--text-2); cursor: pointer; padding: 3px 6px; border-radius: 4px; }
-.brand-link:hover { color: var(--accent); background-color: var(--surface); }
 
 /* ---------- Tab ---------- */
 .tabs { display: flex; flex-direction: row; height: 31px; margin: 0 10px; border-bottom: 1px solid var(--line); }
@@ -152,7 +150,6 @@ body.drag-active .cmd:hover { border-color: var(--line); }
 }
 .section.cards .cmd-label { font-size: 12px; font-weight: 500; letter-spacing: 0.3px; }
 
-.root-box { display: flex; flex-direction: column; margin: 12px 2px 0 2px; padding: 8px; border-radius: var(--radius); background-color: var(--surface); }
 .root-path { font-size: 11px; color: var(--text); margin: 2px 0 8px 0; word-break: break-all; }
 .btn {
   display: flex; align-self: flex-start; align-items: center; height: 24px; padding: 0 10px;
@@ -161,6 +158,59 @@ body.drag-active .cmd:hover { border-color: var(--line); }
 .btn:hover { border-color: var(--accent); color: var(--accent); }
 
 
+
+
+/* ---------- Theme (màu chủ đạo) – chọn trong Cài đặt, xem js/settings.js ---------- */
+body.theme-champagne { --accent: #d6b06b; --accent-soft: rgba(214, 176, 107, 0.14); --accent-ink: #1b1b1b; }
+body.theme-ocean { --accent: #5fb3d9; --accent-soft: rgba(95, 179, 217, 0.14); --accent-ink: #1b1b1b; }
+body.theme-jade { --accent: #5cc5a0; --accent-soft: rgba(92, 197, 160, 0.14); --accent-ink: #1b1b1b; }
+body.theme-rose { --accent: #e59aa8; --accent-soft: rgba(229, 154, 168, 0.14); --accent-ink: #1b1b1b; }
+body.theme-lavender { --accent: #a99be6; --accent-soft: rgba(169, 155, 230, 0.14); --accent-ink: #1b1b1b; }
+body.theme-crimson { --accent: #e25c5c; --accent-soft: rgba(226, 92, 92, 0.14); --accent-ink: #1b1b1b; }
+body.theme-graphite { --accent: #c8c8c8; --accent-soft: rgba(200, 200, 200, 0.14); --accent-ink: #1b1b1b; }
+@media (prefers-color-scheme: light), (prefers-color-scheme: lightest) {
+  body.theme-champagne { --accent: #9b7432; --accent-soft: rgba(155, 116, 50, 0.13); --accent-ink: #ffffff; }
+  body.theme-ocean { --accent: #1f6f99; --accent-soft: rgba(31, 111, 153, 0.13); --accent-ink: #ffffff; }
+  body.theme-jade { --accent: #1d7d5c; --accent-soft: rgba(29, 125, 92, 0.13); --accent-ink: #ffffff; }
+  body.theme-rose { --accent: #b0485d; --accent-soft: rgba(176, 72, 93, 0.13); --accent-ink: #ffffff; }
+  body.theme-lavender { --accent: #5b4bb0; --accent-soft: rgba(91, 75, 176, 0.13); --accent-ink: #ffffff; }
+  body.theme-crimson { --accent: #b3261e; --accent-soft: rgba(179, 38, 30, 0.13); --accent-ink: #ffffff; }
+  body.theme-graphite { --accent: #4a4a4a; --accent-soft: rgba(74, 74, 74, 0.13); --accent-ink: #ffffff; }
+}
+
+/* ---------- Mật độ nút: Gọn ---------- */
+body.density-compact .cmd { height: 24px; }
+body.density-compact .cmd-label { font-size: 10.5px; }
+body.density-compact .section { margin-top: 7px; }
+body.density-compact .section.feature .cmd { height: 30px; }
+body.density-compact .section.cards .cmd { height: 34px; }
+
+/* ---------- Biểu tượng Cài đặt ---------- */
+.icon-btn .ic-gear { stroke: none; }
+.icon-btn .ic-gear .hole { fill: var(--bg); }
+.icon-btn:hover .ic-gear .hole { fill: var(--bg); }
+
+/* ---------- Hộp thoại Cài đặt ---------- */
+.set-section { display: flex; flex-direction: column; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.set-title { font-size: 12px; font-weight: 600; margin-bottom: 8px; }
+.set-label { font-size: 11px; color: var(--text-2); margin-bottom: 6px; }
+.set-row { display: flex; flex-direction: row; align-items: center; justify-content: space-between; margin-top: 10px; }
+.set-link { font-size: 11px; color: var(--accent); cursor: pointer; margin-top: 2px; }
+.swatches { display: flex; flex-direction: row; flex-wrap: wrap; }
+.swatch {
+  display: flex; flex-direction: column; align-items: center; width: 50px; padding: 4px 0; margin: 0 2px 4px 0;
+  border-radius: var(--radius); border: 1px solid transparent; cursor: pointer;
+}
+.swatch:hover { background-color: var(--surface); }
+.swatch.active { border-color: var(--accent); background-color: var(--surface); }
+.swatch-dot { width: 22px; height: 22px; border-radius: 11px; }
+.swatch-name { font-size: 9px; white-space: nowrap; color: var(--text-2); margin-top: 4px; text-align: center; }
+.swatch.active .swatch-name { color: var(--text); }
+.seg { display: flex; flex-direction: row; border: 1px solid var(--line); border-radius: var(--radius); }
+.seg-opt { display: flex; align-items: center; height: 24px; padding: 0 12px; font-size: 11px; color: var(--text-2); cursor: pointer; }
+.seg-opt.active { background-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
+.dbtn.first { margin-left: 0; }
+#dlgSettings .root-path { font-size: 11px; margin: 0 0 8px 0; word-break: break-all; }
 
 /* ---------- Hộp thoại ---------- */
 dialog { background-color: var(--bg); color: var(--text); }
