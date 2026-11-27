@@ -16,6 +16,7 @@ plugin/                 ← thư mục plugin (UDT nạp và đóng gói thư m�
   icons/
   js/core.js            executeAsModal + batchPlay, gộp History, báo lỗi
   js/files.js           đọc/ghi file, token cho batchPlay
+  js/arrange.js         chế độ Sắp xếp: kéo thả đổi vị trí nút, lưu thứ tự
   js/steps.js           TỰ SINH: lệnh batchPlay chuyển từ script JSX cũ
   js/features/
     save.js             JPG, PNG
@@ -35,6 +36,7 @@ tools/
 - Lệnh lỗi sẽ hiện hộp thoại báo lỗi. Lệnh chạy xong không hiện thông báo (chỉ ghi ra console, xem trong UDT → Debug).
 - Panel UXP không tự cuộn, nên `#app` được đặt phủ kín panel và tự cuộn bằng `overflow-y: auto`.
 - Từ Photoshop 27.11, nếu bật Preferences → Tools → *Zoom with Scroll Wheel* thì con lăn chuột không cuộn được panel UXP (phải giữ Alt). Đây là lỗi của Photoshop. `main.js` có đoạn tự cuộn dự phòng; nếu đoạn này vẫn không chạy được, tắt tuỳ chọn trên là con lăn cuộn bình thường.
+- **Sắp xếp nút:** bấm "Sắp xếp" ở góc trên để vào chế độ sắp xếp, kéo nút tới vị trí mới (chỉ trong cùng nhóm), bấm "Xong" để thoát. Trong chế độ này bấm nút không chạy lệnh. Thứ tự lưu trên từng máy (localStorage); "Khôi phục mặc định" trả về thứ tự gốc. Mã nằm ở `js/arrange.js` (tự xử lý sự kiện chuột vì kéo thả HTML5 không chạy ổn định trong UXP).
 - Muốn đổi màu nhấn, sửa biến `--accent` trong `css/style.css`.
 
 ## Chạy thử
@@ -101,3 +103,4 @@ Lệnh mới ghi bằng Photoshop (Actions panel → *Copy As JavaScript*) có t
 - [ ] Crop 10x15 và Đảng viên: chạy với guide và với vùng chọn.
 - [ ] GHÉP ÁO: mở cả 10 nhóm, bấm một mẫu PNG và một mẫu PSD.
 - [ ] JPG, PNG, VISA.
+- [ ] Sắp xếp: kéo nút trong từng nhóm, tự cuộn khi kéo sát mép, thứ tự còn nguyên sau khi tắt mở Photoshop, Khôi phục mặc định.

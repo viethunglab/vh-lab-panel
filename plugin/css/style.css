@@ -100,6 +100,22 @@ body {
 body.busy .cmd { opacity: 0.55; }
 body.busy .cmd.running { opacity: 1; }
 
+/* ---------- Chế độ Sắp xếp ---------- */
+#btnArrange { margin-right: 2px; }
+body.arranging #btnArrange { color: var(--accent-ink); background-color: var(--accent); font-weight: 600; }
+.arrange-bar {
+  display: none; flex-direction: row; align-items: center; justify-content: space-between;
+  height: 28px; margin: 8px 10px 0 10px; padding: 0 8px; border-radius: var(--radius);
+  background-color: var(--accent-soft); color: var(--accent); font-size: 11px;
+}
+body.arranging .arrange-bar { display: flex; }
+.arrange-reset { cursor: pointer; color: var(--text-2); }
+.arrange-reset:hover { color: var(--text); }
+body.arranging .cmd { border: 1px dashed var(--line); cursor: move; }
+body.arranging .cmd:hover { border-color: var(--accent); }
+body.arranging .cmd.dragging { opacity: 0.35; border: 1px dashed var(--accent); }
+body.drag-active .cmd:hover { border-color: var(--line); }
+
 /* Hàng thao tác nhanh: 5 nút, nhấn bằng màu chủ đạo */
 .section.quick .cmd { flex: 0 0 18%; padding: 0; background-color: var(--accent-soft); color: var(--accent); }
 .section.quick .cmd-label { font-weight: 600; }

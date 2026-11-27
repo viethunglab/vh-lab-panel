@@ -8,6 +8,7 @@ const crop = require('./js/features/crop');
 const xepanh = require('./js/features/xepanh');
 const gallery = require('./js/features/gallery');
 const external = require('./js/features/external');
+const arrange = require('./js/arrange');
 
 const HOME_URL = 'https://www.facebook.com/hieuanhviethung';
 
@@ -55,7 +56,7 @@ const PAGES = {
 
 let busy = false;
 async function runCmd(c, el) {
-  if (busy) return;
+  if (busy || arrange.isArranging()) return; // chế độ Sắp xếp: bấm nút không chạy lệnh
   busy = true;
   document.body.classList.add('busy');
   el.classList.add('running');
@@ -67,10 +68,12 @@ async function runCmd(c, el) {
 }
 
 function render() {
+  document.querySelectorAll('.section').forEach((s) => s.parentNode.removeChild(s));
   for (const [page, sections] of Object.entries(PAGES)) {
     const host = document.getElementById('page-' + page);
     const anchor = host.querySelector('.page-extra');
-    for (const s of sections) {
+    sections.forEach((s, si) => {
+      const group = page + ':' + si;
       const sec = document.createElement('section');
       sec.className = 'section' + (s.style ? ' ' + s.style : '');
       if (s.title) {
@@ -81,10 +84,12 @@ function render() {
       }
       const grid = document.createElement('div');
       grid.className = 'grid';
-      for (const c of s.cmds) {
+      grid.setAttribute('data-group', group);
+      for (const c of arrange.applyOrder(group, s.cmds)) {
         const el = document.createElement('div');
         el.className = 'cmd';
         el.id = 'cmd-' + c.id;
+        el.setAttribute('data-id', c.id);
         el.title = c.label;
         el.tabIndex = 0;
         const t = document.createElement('span');
@@ -97,7 +102,7 @@ function render() {
       }
       sec.appendChild(grid);
       host.insertBefore(sec, anchor);
-    }
+    });
   }
 }
 
@@ -134,6 +139,7 @@ function initWheelFallback() {
 }
 
 render();
+arrange.init({ onReset: render });
 initTabs();
 initWheelFallback();
 gallery.showRoot();
