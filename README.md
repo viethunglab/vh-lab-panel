@@ -57,9 +57,9 @@ tools/
 
 ## Đóng gói và cài đặt .ccx
 
-Bản mới nhất đã đóng gói sẵn: `dist/com.viethunglabs.vhlabpanel_PS.ccx` (không đưa lên git, xem `.gitignore`).
+Mỗi phiên bản có một file riêng trong `dist/`, đặt tên `com.viethunglabs.vhlabpanel_PS_<version>.ccx` (ví dụ `..._PS_4.0.1.ccx`); không ghi đè bản cũ. Các file này không đưa lên git (xem `.gitignore`).
 File `.ccx` là file nén ZIP của thư mục `plugin/` (manifest.json ở gốc). Có thể tạo lại bằng UDT như dưới đây,
-hoặc nén thẳng nội dung thư mục `plugin/` rồi đổi đuôi thành `.ccx`. Trước mỗi lần phát hành, tăng `version` trong `manifest.json`.
+hoặc nén thẳng nội dung thư mục `plugin/` rồi đổi đuôi thành `.ccx`. Trước mỗi lần phát hành, tăng `version` trong `manifest.json` rồi tạo file `.ccx` mới mang số phiên bản đó.
 
 
 1. Trong UDT, bấm **••• → Package** rồi chọn thư mục lưu. UDT sẽ tạo ra file `com.viethunglabs.vhlabpanel_PS.ccx`.
