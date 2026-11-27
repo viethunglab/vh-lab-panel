@@ -194,3 +194,18 @@ function initSettings() {
 
 settings.apply();
 initSettings();
+showVersion();
+
+// Hiện phiên bản thật của plugin (lấy từ manifest.json) ở header và trong Cài đặt.
+async function showVersion() {
+  let v = '';
+  try { v = require('uxp').versions.plugin || ''; } catch (e) { /* bỏ qua */ }
+  if (!v) {
+    try {
+      const folder = await require('uxp').storage.localFileSystem.getPluginFolder();
+      const entry = await folder.getEntry('manifest.json');
+      v = JSON.parse(await entry.read()).version || '';
+    } catch (e) { /* bỏ qua */ }
+  }
+  document.querySelectorAll('.app-version').forEach((el) => { el.textContent = v ? 'v' + v : ''; });
+}
