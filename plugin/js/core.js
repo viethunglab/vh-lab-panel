@@ -94,8 +94,10 @@ async function get(target) {
 }
 
 // Chạy fn trong modal scope. history=true: gộp mọi thay đổi thành 1 bước History mang tên lệnh.
+// interactive=true (mặc định): không hiện thanh tiến trình chặn màn hình của Photoshop (bình thường hiện khi lệnh
+// chạy quá ~2 giây) – cần vì nhiều lệnh chờ người dùng thao tác: công cụ Crop, Color Picker, hộp thoại filter.
 async function runModal(name, fn, opts) {
-  const options = Object.assign({ history: true }, opts || {});
+  const options = Object.assign({ history: true, interactive: true }, opts || {});
   try {
     await core.executeAsModal(async (ctx) => {
       let hid = null;
@@ -112,7 +114,7 @@ async function runModal(name, fn, opts) {
           try { await ctx.hostControl.resumeHistory(hid, ok); } catch (e) { /* tài liệu đã đóng/đổi */ }
         }
       }
-    }, { commandName: name });
+    }, { commandName: name, interactive: options.interactive });
     return true;
   } catch (e) {
     // Người dùng bấm Cancel trong hộp thoại của Photoshop (mã -128): không coi là lỗi.
