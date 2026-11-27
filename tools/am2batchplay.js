@@ -83,7 +83,9 @@ const _jamRefFix = 0;
 function convert(code, file) {
   const steps = [];
   const DialogModes = { ALL: 'ALL', NO: 'NO', ERROR: 'ERROR' };
-  const mode = (m) => (m === 'ALL' ? 'display' : 'dontDisplay');
+  // DialogModes.NO của ExtendScript = không bao giờ hiện hộp thoại -> 'silent'.
+  // ('dontDisplay' vẫn có thể bật hộp thoại khi Photoshop thấy thiếu tham số – vd. hộp Open.)
+  const mode = (m) => (m === 'ALL' ? 'display' : m === 'NO' ? 'silent' : 'dontDisplay');
   const app = {
     charIDToTypeID: (s) => new ID(s, true), stringIDToTypeID: (s) => new ID(s, false),
     executeAction: (e, d, m) => { steps.push(Object.assign({ _obj: idStr(e) }, d ? d.o : {}, { _options: { dialogOptions: mode(m) } })); },

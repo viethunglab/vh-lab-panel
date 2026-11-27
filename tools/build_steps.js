@@ -14,7 +14,7 @@ const conv = (p) => convert(read(p), p);
 const INLINE_ACTIONS = {
   'Tool/Màu nền': conv('tools/1.jsx'),
   'Tool/Tạo viền': conv('tools/15.jsx'),
-  'Tool/Flatten Image': [{ _obj: 'flattenImage', _options: { dialogOptions: 'dontDisplay' } }],
+  'Tool/Flatten Image': [{ _obj: 'flattenImage', _options: { dialogOptions: 'silent' } }],
 };
 function inlinePlays(steps, id) {
   const out = [];
@@ -48,6 +48,19 @@ function fixPresets(steps, id) {
     return out;
   });
 }
+// Lệnh "copy" có đích là layer + độ lệch (Alt-kéo bằng Move tool khi ghi action) = nhân bản layer rồi dời.
+// batchPlay không hiểu đúng dạng này (cửa sổ Open bật lên), nên tách thành duplicate + move.
+function fixLayerCopyOffset(steps) {
+  const out = [];
+  for (const s of steps) {
+    if (s._obj === '$copy' && s._target && s['$T   '] && s['$T   ']._obj === '$Ofst') {
+      const opt = s._options;
+      out.push({ _obj: 'duplicate', _target: s._target, version: 5, _options: opt });
+      out.push({ _obj: '$move', _target: [{ _ref: '$Lyr ', _enum: '$Ordn', _value: '$Trgt' }], '$T   ': s['$T   '], _options: opt });
+    } else out.push(s);
+  }
+  return out;
+}
 function check(steps, id) {
   const j = JSON.stringify(steps);
   if (j.includes('__needsToken')) throw new Error(id + ': còn đường dẫn file cứng');
@@ -58,7 +71,7 @@ function check(steps, id) {
 const SPEC = {
   // TOOLS – hàng trên
   cameraraw: 'cameraraw.jsx',
-  RT066: () => [{ _obj: 'flattenImage', _options: { dialogOptions: 'dontDisplay' } }],
+  RT066: () => [{ _obj: 'flattenImage', _options: { dialogOptions: 'silent' } }],
   // Quick Retouch
   Q1: 'quick-retouch/1.jsx', Q2: 'quick-retouch/2.jsx', Q3: 'quick-retouch/3.jsx', Q4: 'quick-retouch/4.jsx',
   Q5: 'quick-retouch/5.jsx', Q6: 'quick-retouch/6.jsx', Q8: 'quick-retouch/8.jsx',
@@ -74,7 +87,7 @@ for (let i = 1; i <= 20; i++) SPEC['L' + i] = 'layout/' + i + '.jsx';
 const result = {};
 for (const [id, src] of Object.entries(SPEC)) {
   const steps = typeof src === 'function' ? src() : conv(src);
-  result[id] = check(fixPresets(inlinePlays(steps, id), id), id);
+  result[id] = check(fixLayerCopyOffset(fixPresets(inlinePlays(steps, id), id)), id);
 }
 const header = '// TỰ SINH bởi tools/build_steps.js từ script JSX gốc (nhánh cep-legacy-v3.1). Không sửa tay.\n' +
   '// Mỗi mục là danh sách descriptor batchPlay; "$xxxx" là mã charID của Photoshop.\n';
