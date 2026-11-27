@@ -16,3 +16,6 @@ desktop.ini
 # Gói plugin và thư viện tạm
 *.ccx
 node_modules/
+
+# Thư mục chứa file cũ chờ xoá
+_to_delete/
