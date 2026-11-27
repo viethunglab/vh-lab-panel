@@ -158,14 +158,14 @@ function computeLayout(cfg, docSizes) {
 const NO = { dialogOptions: 'dontDisplay' };
 const selectAll = () => play({ _obj: 'set', _target: [{ _ref: 'channel', _property: 'selection' }], to: { _enum: 'ordinal', _value: 'allEnum' }, _options: NO });
 const deselect = () => play({ _obj: 'set', _target: [{ _ref: 'channel', _property: 'selection' }], to: { _enum: 'ordinal', _value: 'none' }, _options: NO });
-const copy = () => play({ _obj: '$copy', _options: NO });
-const paste = () => play({ _obj: '$past', '$AntA': { _enum: '$Annt', _value: '$Anno' }, '$As  ': { _class: '$Pxel' }, _options: NO });
-const rotate270 = () => play({ _obj: '$Rtte', _target: [{ _ref: '$Dcmn', _enum: '$Ordn', _value: '$Frst' }], '$Angl': { _unit: 'angleUnit', _value: -90 }, _options: NO });
+const copy = () => play({ _obj: 'copyEvent', _options: NO });
+const paste = () => play({ _obj: 'paste', '$AntA': { _enum: '$Annt', _value: '$Anno' }, '$As  ': { _class: '$Pxel' }, _options: NO });
+const rotate270 = () => play({ _obj: 'rotateEventEnum', _target: [{ _ref: '$Dcmn', _enum: '$Ordn', _value: '$Frst' }], '$Angl': { _unit: 'angleUnit', _value: -90 }, _options: NO });
 const pxv = (v) => ({ _unit: 'pixelsUnit', _value: v });
 async function strokeRect(l, t, w, h) {
   await play({ _obj: 'set', _target: [{ _ref: 'channel', _property: 'selection' }],
     to: { _obj: 'rectangle', top: pxv(t), left: pxv(l), bottom: pxv(t + h), right: pxv(l + w) }, _options: NO });
-  await play({ _obj: '$Strk', '$Wdth': 1, '$Lctn': { _enum: '$StrL', _value: '$Insd' }, '$Opct': { _unit: 'percentUnit', _value: 100 },
+  await play({ _obj: 'stroke', '$Wdth': 1, '$Lctn': { _enum: '$StrL', _value: '$Insd' }, '$Opct': { _unit: 'percentUnit', _value: 100 },
     '$Md  ': { _enum: '$BlnM', _value: '$Nrml' }, '$Clr ': { _obj: '$RGBC', '$Rd  ': 204, '$Grn ': 204, '$Bl  ': 204 }, _options: NO });
   await deselect();
 }
@@ -174,7 +174,7 @@ async function cropTo3x4(doc, interactive) {
   let cw = W; let ch = Math.round(W * 4 / 3);
   if (ch > H) { ch = H; cw = Math.round(H * 3 / 4); }
   const left = Math.round((W - cw) / 2); const top = Math.round((H - ch) / 2);
-  const d = { _obj: '$Crop', '$T   ': { _obj: '$Rct1', '$Top ': pxv(top), '$Left': pxv(left), '$Btom': pxv(top + ch), '$Rght': pxv(left + cw) },
+  const d = { _obj: 'crop', '$T   ': { _obj: '$Rct1', '$Top ': pxv(top), '$Left': pxv(left), '$Btom': pxv(top + ch), '$Rght': pxv(left + cw) },
     '$Angl': { _unit: 'angleUnit', _value: 0 }, '$Wdth': pxv(SIZES['3x4'].w), '$Hght': pxv(SIZES['3x4'].h),
     '$Rslt': { _unit: 'densityUnit', _value: DPI }, 'delete': true };
   if (interactive) {

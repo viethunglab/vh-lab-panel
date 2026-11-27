@@ -56,10 +56,28 @@ function fixLayerCopyOffset(steps) {
     if (s._obj === '$copy' && s._target && s['$T   '] && s['$T   ']._obj === '$Ofst') {
       const opt = s._options;
       out.push({ _obj: 'duplicate', _target: s._target, version: 5, _options: opt });
-      out.push({ _obj: '$move', _target: [{ _ref: '$Lyr ', _enum: '$Ordn', _value: '$Trgt' }], '$T   ': s['$T   '], _options: opt });
+      out.push({ _obj: 'move', _target: [{ _ref: '$Lyr ', _enum: '$Ordn', _value: '$Trgt' }], '$T   ': s['$T   '], _options: opt });
     } else out.push(s);
   }
   return out;
+}
+// Tên sự kiện: dùng stringID thay cho mã charID "$xxxx". Với lệnh Rasterize ("$Rstr") batchPlay báo
+// "The parameters for command "Open" are not currently valid" -> đổi toàn bộ tên sự kiện sang stringID chuẩn.
+const EVENT_IDS = {
+  '$Rtte': 'rotateEventEnum', '$Lvls': 'levels', '$Crvs': 'curves', '$setd': 'set', '$Hd  ': 'hide', '$Shw ': 'show',
+  '$Rstr': 'rasterizeLayer', '$slct': 'select', '$Fl  ': 'fill', '$Mk  ': 'make', '$move': 'move', '$Algn': 'align',
+  '$Crop': 'crop', '$copy': 'copyEvent', '$past': 'paste', '$Trnf': 'transform', '$Prge': 'purge', '$Cls ': 'close',
+  '$Dplc': 'duplicate', '$FltI': 'flattenImage', '$CpTL': 'copyToLayer', '$HghP': 'highPass',
+};
+function useStringEvents(steps, id) {
+  return steps.map((s) => {
+    if (typeof s._obj !== 'string' || s._obj[0] !== '$') return s;
+    const name = EVENT_IDS[s._obj];
+    if (!name) throw new Error(id + ': chưa có stringID cho sự kiện ' + s._obj);
+    const out = Object.assign({}, s, { _obj: name });
+    if (name === 'rasterizeLayer' && out['$What']) { out.what = out['$What']; delete out['$What']; }
+    return out;
+  });
 }
 function check(steps, id) {
   const j = JSON.stringify(steps);
@@ -87,7 +105,7 @@ for (let i = 1; i <= 20; i++) SPEC['L' + i] = 'layout/' + i + '.jsx';
 const result = {};
 for (const [id, src] of Object.entries(SPEC)) {
   const steps = typeof src === 'function' ? src() : conv(src);
-  result[id] = check(fixLayerCopyOffset(fixPresets(inlinePlays(steps, id), id)), id);
+  result[id] = check(useStringEvents(fixLayerCopyOffset(fixPresets(inlinePlays(steps, id), id)), id), id);
 }
 const header = '// TỰ SINH bởi tools/build_steps.js từ script JSX gốc (nhánh cep-legacy-v3.1). Không sửa tay.\n' +
   '// Mỗi mục là danh sách descriptor batchPlay; "$xxxx" là mã charID của Photoshop.\n';
