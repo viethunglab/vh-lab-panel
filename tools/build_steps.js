@@ -65,7 +65,7 @@ const SPEC = {
   // Tools
   T1: 'tools/1.jsx', T2: 'tools/2.jsx', T5: 'tools/5.jsx', T6: 'tools/6.jsx', T7: 'tools/7.jsx',
   T8: 'tools/8.jsx', T9: 'tools/9.jsx', T10: 'tools/10.jsx', T11: 'tools/11.jsx', T12: 'tools/12.jsx',
-  T13: 'tools/13.jsx', T15: 'tools/15.jsx', T16: 'tools/16.jsx', T18: 'tools/18.jsx',
+  T13: 'tools/13.jsx', T15: 'tools/15.jsx', T16: 'tools/16.jsx',
   T19: 'tools/19.jsx', T22: 'tools/22.jsx',
   a46: 'a46.jsx', a47: 'a47.jsx', a48: 'a48.jsx',
 };

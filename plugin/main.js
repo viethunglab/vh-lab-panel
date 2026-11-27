@@ -33,7 +33,7 @@ const PAGES = {
       steps('T1', 'Màu nền'), steps('T2', 'Màu môi'), fn('T3', 'VISA', () => external.openPassportPhoto()),
       steps('T5', 'Bóng da'), steps('T6', 'Đều màu da'), steps('T7', 'Đều sáng da'), steps('T8', 'Nổi khối'),
       steps('T9', 'Sáng mắt'), steps('T10', 'Nhăn áo'), steps('T11', 'Mụn mạnh'), steps('T12', 'Mụn nhẹ'),
-      steps('T13', 'Đẹp da'), steps('T15', 'Tạo viền'), steps('T16', 'Đổ nền'), steps('T18', 'Auto Contrast'),
+      steps('T13', 'Đẹp da'), steps('T15', 'Tạo viền'), steps('T16', 'Đổ nền'),
       steps('T19', 'Gắn số'), steps('T22', 'Gắn số 2'), fn('T21', 'Đảng viên', () => crop.cropTheDangVien()),
       steps('a46', 'Ám vàng'), steps('a47', 'Ám đỏ'), steps('a48', 'Ám tím'),
     ] },
