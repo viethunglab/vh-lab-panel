@@ -16,8 +16,10 @@ const HOME_URL = 'https://www.facebook.com/hieuanhviethung';
 
 // Lệnh tự sinh từ script cũ: chạy danh sách batchPlay trong steps.js.
 // Bố cục XẾP ẢNH cũng gộp History trên ảnh nguồn: Photoshop không phải ghi từng bước nên chạy nhanh hơn.
-// Bố cục có bước đóng tài liệu thì không gộp History (tránh đóng tài liệu đang bị tạm dừng History).
-const closesDocs = (id) => (STEPS[id] || []).some((s) => s._obj === 'close');
+// Không gộp History cho bố cục có bước đóng hoặc chuyển qua lại giữa các tài liệu: khi History của ảnh nguồn
+// đang tạm dừng, Photoshop báo "The command Select is not currently available" lúc quay lại ảnh nguồn.
+const closesDocs = (id) => (STEPS[id] || []).some((s) => s._obj === 'close' ||
+  (s._obj === 'select' && s._target && s._target[0] && s._target[0]._ref === '$Dcmn'));
 function steps(id, label, history) {
   const hist = history !== false && !closesDocs(id);
   return { id, label, run: () => { if (requireDocument()) return runSteps(label, STEPS[id], { history: hist }); } };
