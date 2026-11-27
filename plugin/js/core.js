@@ -4,16 +4,10 @@ const { app, core, action } = require('photoshop');
 
 const USER_CANCEL = -128;
 
-// ---------- Thông báo nhỏ ở cuối panel ----------
-let toastTimer = null;
+// ---------- Thông báo ----------
+// Panel không còn dòng trạng thái: lỗi hiện bằng hộp thoại, thông báo thường thì bỏ qua (ghi ra console).
 function toast(msg, kind) {
-  const el = document.getElementById('toast');
-  if (!el) return;
-  el.textContent = msg;
-  el.title = msg;
-  el.className = 'toast ' + (kind || 'info');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => { el.className = 'toast'; el.textContent = 'Sẵn sàng'; el.title = ''; }, kind === 'error' ? 8000 : 4000);
+  if (kind === 'error') { alertBox(msg, 'Lỗi'); } else { console.log(msg); }
 }
 
 function hasDocument() {

@@ -122,16 +122,6 @@ body.busy .cmd.running { opacity: 1; }
 .btn:hover { border-color: var(--accent); color: var(--accent); }
 
 
-/* ---------- Dòng trạng thái (ngay dưới tab) ---------- */
-.status {
-  display: flex; flex-direction: row; align-items: center;
-  height: 24px; margin: 0 10px; font-size: 10.5px;
-}
-.toast { flex: 1; color: var(--text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.toast.info { color: var(--accent); }
-.toast.error { color: var(--danger); }
-.status-link { color: var(--text-2); cursor: pointer; margin-left: 8px; }
-.status-link:hover { color: var(--accent); }
 
 /* ---------- Hộp thoại ---------- */
 dialog { background-color: var(--bg); color: var(--text); }

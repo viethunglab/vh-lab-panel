@@ -144,4 +144,3 @@ initWheelFallback();
 gallery.showRoot();
 document.getElementById('gaChangeRoot').addEventListener('click', () => gallery.chooseRoot());
 document.getElementById('brandLink').addEventListener('click', openHome);
-document.getElementById('statusLink').addEventListener('click', openHome);
