@@ -1,0 +1,14 @@
+# Visual Studio workspace cache
+.vs/
+
+# macOS / Windows rác hệ thống
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# File sao lưu thủ công
+*.bak
+*.bk.jsx
+*.bak.jsx
+* - Copy.*
+* - Copy (*).*
