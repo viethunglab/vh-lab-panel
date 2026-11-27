@@ -41,7 +41,8 @@ body {
 /* Panel UXP không tự cuộn: #app phủ kín panel và tự cuộn (cách Adobe khuyên trên diễn đàn nhà phát triển). */
 #app {
   position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-  overflow-y: auto; overflow-x: hidden;
+  /* scroll (không dùng auto): luôn giữ chỗ cho thanh cuộn để bề ngang không đổi khi chuyển tab */
+  overflow-y: scroll; overflow-x: hidden;
   display: flex; flex-direction: column;
 }
 /* Trong vùng cuộn flex, các khối mặc định bị co lại khi nội dung dài (flex-shrink: 1),
