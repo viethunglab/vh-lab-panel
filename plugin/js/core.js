@@ -62,6 +62,13 @@ function errorOf(result) {
 // lượt trao đổi giữa plugin và Photoshop). batchPlay mặc định dừng ở bước lỗi đầu tiên (continueOnError = false),
 // nên vẫn giữ hành vi của action: dừng khi lỗi hoặc khi người dùng bấm Cancel.
 // Riêng bước có dữ liệu thô (filter Portraiture) chạy tách riêng để có đường lùi.
+// Chạy riêng từng bước (không gộp) với: bước chờ người dùng thao tác (hộp thoại, công cụ Crop) và bước quay lại
+// trạng thái History cũ – gộp chung các bước này làm sai kết quả (vd. bố cục 4 (2) + 8 (2): ảnh 3x4 không được crop).
+function mustRunAlone(d) {
+  if (d._options && d._options.dialogOptions === 'display') return true;
+  const t = d._target && d._target[0];
+  return d._obj === 'select' && t && (t._ref === '$HstS' || t._ref === 'historyState');
+}
 async function play(descriptors) {
   const list = Array.isArray(descriptors) ? descriptors : [descriptors];
   const results = [];
@@ -77,7 +84,13 @@ async function play(descriptors) {
     batch = [];
   };
   for (const d of list) {
-    if (!hasRawData(d)) { batch.push(d); continue; }
+    if (!hasRawData(d)) {
+      if (!mustRunAlone(d)) { batch.push(d); continue; }
+      await flush();
+      batch.push(d);
+      await flush();
+      continue;
+    }
     await flush();
     let res;
     // Thử truyền thiết lập đã lưu; nếu Photoshop từ chối (báo lỗi hoặc ném ngoại lệ) thì mở hộp thoại filter.
