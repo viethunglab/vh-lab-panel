@@ -18,7 +18,7 @@ plugin/                 ← thư mục plugin (UDT nạp và đóng gói thư m�
   js/files.js           đọc/ghi file, token cho batchPlay
   js/steps.js           TỰ SINH: lệnh batchPlay chuyển từ script JSX cũ
   js/features/
-    save.js             JPG, PNG, Lưu jpg
+    save.js             JPG, PNG
     crop.js             Crop 10x15, Đảng viên (crop thẻ 3x4/4x6)
     xepanh.js           Nhiều người (xếp ảnh thẻ tự động)
     gallery.js          GHÉP ÁO
@@ -31,7 +31,7 @@ tools/
 ## Giao diện
 
 - Màu nền, chữ và viền lấy từ theme của Photoshop (Darkest, Dark, Light, Lightest). Chỉ dùng một màu nhấn là vàng champagne: `#d6b06b` khi theme tối, `#9b7432` khi theme sáng.
-- Mỗi tab chia thành các nhóm có tiêu đề nhỏ. Lưới 3 cột. Hàng "Thao tác nhanh" có 5 nút được nhấn mạnh.
+- Lưới 3 cột. Tab Công cụ: hàng đầu 5 nút được nhấn mạnh, các nút còn lại theo thứ tự như bản cũ. Tab Xếp ảnh và Ghép áo chia nhóm có tiêu đề nhỏ.
 - Lệnh lỗi sẽ hiện hộp thoại báo lỗi. Lệnh chạy xong không hiện thông báo (chỉ ghi ra console, xem trong UDT → Debug).
 - Panel UXP không tự cuộn, nên `#app` được đặt phủ kín panel và tự cuộn bằng `overflow-y: auto`.
 - Từ Photoshop 27.11, nếu bật Preferences → Tools → *Zoom with Scroll Wheel* thì con lăn chuột không cuộn được panel UXP (phải giữ Alt). Đây là lỗi của Photoshop. `main.js` có đoạn tự cuộn dự phòng; nếu đoạn này vẫn không chạy được, tắt tuỳ chọn trên là con lăn cuộn bình thường.
@@ -65,8 +65,8 @@ Lệnh mới ghi bằng Photoshop (Actions panel → *Copy As JavaScript*) có t
 
 | Tab | Nút | Bản UXP |
 |---|---|---|
-| TOOLS | C-Raw, Gộp, Q1–Q8, T1–T23 (trừ các nút ghi bên dưới), Tăng nét 2, Ám vàng/đỏ/tím | Tự chuyển từ JSX (`steps.js`) |
-| TOOLS | JPG, PNG, Lưu jpg | `save.js` |
+| TOOLS | C-Raw, Gộp và các nút chỉnh ảnh, retouch, Ám vàng/đỏ/tím | Tự chuyển từ JSX (`steps.js`) |
+| TOOLS | JPG, PNG | `save.js` |
 | TOOLS | Crop, Đảng viên | `crop.js` |
 | TOOLS | VISA | `external.js` |
 | XẾP ẢNH | 20 bố cục cố định | Tự chuyển từ JSX. Action trong bộ "Tool" được nhúng thẳng vào lệnh |
@@ -77,9 +77,9 @@ Lệnh mới ghi bằng Photoshop (Actions panel → *Copy As JavaScript*) có t
 
 - Bỏ khoảng 1.300 file không dùng: preset, script cũ, các tab TAB4/TAB5/index2/index3, file `.rar`, bản sao. Bỏ hẳn các nhóm nút đã comment.
 - Bỏ nút **Reset action** (script rỗng) và **Xuất js** (dùng *Copy As JavaScript* của Photoshop thay thế).
+- Theo yêu cầu, bỏ các nút Trắng da, SkinFiner, Tách tóc, Tăng nét 2, Upscale, Lưu jpg. Tab Công cụ không chia nhóm, giữ thứ tự nút như bản cũ.
 - Các bố cục XẾP ẢNH không cần nạp bộ action "Tool" nữa. Các bước *Màu nền*, *Tạo viền*, *Flatten* được nhúng thẳng vào lệnh.
 - Các bố cục (CP) 1+6, (CP) 0+8, Can phạm, Can phạm 2, 4x(1+2) và 4x(2+0) không cần preset tài liệu "CP"/"CP2" trên máy nữa. Kích thước được ghi thẳng: CP = 12,7 x 8,6 cm, CP2 = 12,7 x 17,8 cm, 300 PPI.
-- **Lưu jpg** trước đây ghi cứng vào `/d/TRINH GIA/HANG NGAY/2024/09/15/01/NAME.jpg`. Nay nút này gộp lớp rồi hỏi nơi lưu.
 - **Crop 10x15**: sửa lỗi mở rộng canvas khi khung crop vượt mép trái hoặc mép trên.
 - **GHÉP ÁO**: thư mục dữ liệu không còn ghi cứng trong 10 file. Mặc định là `D:\TRINH GIA\TU LIEU LAM ANH\PANEL\DATA`, đổi được ở tab GHÉP ÁO.
 - Một lần bấm nút ở tab TOOLS chỉ tạo một bước History. Khi lệnh bị lỗi hoặc bị huỷ, ảnh được trả lại trạng thái trước khi bấm.
@@ -94,10 +94,10 @@ Lệnh mới ghi bằng Photoshop (Actions panel → *Copy As JavaScript*) có t
 
 - [ ] Panel hiện đủ 3 tab và giao diện theo theme sáng/tối của Photoshop.
 - [ ] TOOLS: từng nút cho kết quả giống bản CEP trên cùng một ảnh mẫu.
-- [ ] Đẹp da (Portraiture) và SkinFiner: kiểm tra plugin có nhận đúng thiết lập đã lưu. Nếu không nhận, plugin sẽ mở hộp thoại của filter.
+- [ ] Đẹp da (Portraiture): kiểm tra filter có nhận đúng thiết lập đã lưu. Nếu không nhận, plugin sẽ mở hộp thoại của filter.
 - [ ] Màu nền, và các bố cục XẾP ẢNH có bước Màu nền: hộp chọn màu có hiện như bản cũ.
 - [ ] XẾP ẢNH: 20 bố cục cố định, đặc biệt Can phạm, Can phạm 2, 4x(1+2) và 4x(2+0) (các bố cục này có đóng tài liệu).
 - [ ] Nhiều người: chạy với 2–3 ảnh, khổ CP2, bật và tắt tự lưu JPG.
 - [ ] Crop 10x15 và Đảng viên: chạy với guide và với vùng chọn.
 - [ ] GHÉP ÁO: mở cả 10 nhóm, bấm một mẫu PNG và một mẫu PSD.
-- [ ] JPG, PNG, Lưu jpg, VISA.
+- [ ] JPG, PNG, VISA.

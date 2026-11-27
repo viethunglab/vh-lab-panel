@@ -21,28 +21,21 @@ const layout = (pairs) => pairs.map(([id, label]) => steps(id, label, false));
 
 // style: 'quick' = hàng 5 nút nhấn mạnh; 'feature' = nút lớn cả hàng; 'cards' = thẻ 2 cột; mặc định = lưới 3 cột.
 const PAGES = {
+  // Tab Công cụ: không chia nhóm, giữ thứ tự nút như bản cũ.
   tools: [
-    { title: 'Thao tác nhanh', style: 'quick', cmds: [
+    { style: 'quick', cmds: [
       steps('cameraraw', 'C-Raw'), fn('RT033', 'JPG', () => save.saveCopy('jpg')), fn('RT051', 'PNG', () => save.saveCopy('png')),
       steps('RT066', 'Gộp'), fn('D41', 'Crop', () => crop.crop10x15()),
     ] },
-    { title: 'Chỉnh cơ bản', cmds: [
+    { cmds: [
       steps('Q1', 'Xoay'), steps('Q2', 'Contrast'), steps('Q3', 'Unsharp'), steps('Q4', 'Level'),
-      steps('Q5', 'Curves'), steps('Q6', 'Saturation'), steps('Q7', 'Trắng da'), steps('Q8', 'Soft Light'),
-    ] },
-    { title: 'Retouch chân dung', cmds: [
-      steps('T13', 'Đẹp da'), steps('T23', 'SkinFiner'), steps('T5', 'Bóng da'), steps('T6', 'Đều màu da'),
-      steps('T7', 'Đều sáng da'), steps('T8', 'Nổi khối'), steps('T11', 'Mụn mạnh'), steps('T12', 'Mụn nhẹ'),
-      steps('T9', 'Sáng mắt'), steps('T2', 'Màu môi'), steps('T14', 'Tách tóc'), steps('T10', 'Nhăn áo'),
-    ] },
-    { title: 'Màu & độ nét', cmds: [
-      steps('T18', 'Auto Contrast'), steps('K19', 'Tăng nét 2'), steps('T4', 'Upscale'),
+      steps('Q5', 'Curves'), steps('Q6', 'Saturation'), steps('Q8', 'Soft Light'),
+      steps('T1', 'Màu nền'), steps('T2', 'Màu môi'), fn('T3', 'VISA', () => external.openPassportPhoto()),
+      steps('T5', 'Bóng da'), steps('T6', 'Đều màu da'), steps('T7', 'Đều sáng da'), steps('T8', 'Nổi khối'),
+      steps('T9', 'Sáng mắt'), steps('T10', 'Nhăn áo'), steps('T11', 'Mụn mạnh'), steps('T12', 'Mụn nhẹ'),
+      steps('T13', 'Đẹp da'), steps('T15', 'Tạo viền'), steps('T16', 'Đổ nền'), steps('T18', 'Auto Contrast'),
+      steps('T19', 'Gắn số'), steps('T22', 'Gắn số 2'), fn('T21', 'Đảng viên', () => crop.cropTheDangVien()),
       steps('a46', 'Ám vàng'), steps('a47', 'Ám đỏ'), steps('a48', 'Ám tím'),
-    ] },
-    { title: 'Nền & viền', cmds: [steps('T1', 'Màu nền'), steps('T15', 'Tạo viền'), steps('T16', 'Đổ nền')] },
-    { title: 'Ảnh thẻ & tiện ích', cmds: [
-      fn('T21', 'Đảng viên', () => crop.cropTheDangVien()), fn('T3', 'VISA', () => external.openPassportPhoto()),
-      steps('T19', 'Gắn số'), steps('T22', 'Gắn số 2'), fn('T17', 'Lưu jpg', () => save.flattenAndSaveJpg()),
     ] },
   ],
   layout: [
@@ -80,10 +73,12 @@ function render() {
     for (const s of sections) {
       const sec = document.createElement('section');
       sec.className = 'section' + (s.style ? ' ' + s.style : '');
-      const h = document.createElement('div');
-      h.className = 'section-title';
-      h.textContent = s.title;
-      sec.appendChild(h);
+      if (s.title) {
+        const h = document.createElement('div');
+        h.className = 'section-title';
+        h.textContent = s.title;
+        sec.appendChild(h);
+      }
       const grid = document.createElement('div');
       grid.className = 'grid';
       for (const c of s.cmds) {
