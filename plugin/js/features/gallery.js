@@ -1,4 +1,6 @@
-// Tab GHÉP ÁO: thư viện ảnh xem trước -> đặt (Place Embedded) file dữ liệu vào ảnh đang mở.
+// Tab GHÉP ÁO: thư viện ảnh xem trước -> chọn mẫu:
+//   • file PSD/PSB: mở thành tab (tài liệu) mới;
+//   • file PNG/JPG/TIF: đặt (Place Embedded) thành layer trong ảnh đang mở.
 // Thay cho 10 file jsx/data/*.jsx (JSXBIN) của bản CEP.
 // Cấu trúc thư mục:  <gốc>\<NHÓM>\VIEW\DU LIEU\<mục>\<tên>.png   (ảnh xem trước)
 //                    <gốc>\<NHÓM>\DU LIEU\<mục>\<tên>.png|.psd   (file ghép thật, cùng tên)
@@ -44,7 +46,14 @@ async function subFolders(folder) {
   return (await folder.getEntries()).filter((e) => e.isFolder).sort((a, b) => a.name.localeCompare(b.name, 'vi', { numeric: true }));
 }
 
-async function placeFile(entry) {
+const OPEN_AS_DOC = ['.psd', '.psb'];
+
+async function useFile(entry) {
+  if (OPEN_AS_DOC.includes(extOf(entry.name))) {
+    await runModal('Mở: ' + entry.name, async () => { await app.open(entry); }, { history: false });
+    return;
+  }
+  if (!requireDocument()) return; // đặt PNG cần một ảnh đang mở
   await runModal('Ghép: ' + entry.name, async () => {
     await play({ _obj: 'placeEvent', null: { _path: sessionToken(entry), _kind: 'local' },
       freeTransformCenterState: { _enum: 'quadCenterState', _value: 'QCSAverage' },
@@ -66,7 +75,6 @@ function initWheel(grid) {
   });
 }
 async function openCategory(id) {
-  if (!requireDocument()) return;
   const cat = CATEGORIES[id];
   const root = getRoot();
   const base = await entryAt(root + '\\' + cat.folder);
@@ -100,7 +108,7 @@ async function openCategory(id) {
     const byStem = {};
     for (const f of dataFiles) {
       const k = stem(f.name);
-      // Ưu tiên PSD (giữ lớp) nếu có cả PSD và PNG cùng tên
+      // Có cả PSD và PNG cùng tên: ưu tiên PSD (mở tab mới, giữ lớp)
       if (!byStem[k] || extOf(f.name) === '.psd') byStem[k] = f;
     }
     const views = (await sub.getEntries()).filter((e) => e.isFile && /\.(png|jpe?g)$/i.test(e.name))
@@ -124,7 +132,7 @@ async function openCategory(id) {
       shown++;
       try { img.src = await readAsDataUrl(v); } catch (e) { cap.textContent += ' (lỗi ảnh)'; }
     }
-    if (my === loadToken) status.textContent = sub.name + ': ' + shown + ' mẫu. Bấm vào một mẫu để ghép.';
+    if (my === loadToken) status.textContent = sub.name + ': ' + shown + ' mẫu. Bấm một mẫu: PSD mở tab mới, PNG đặt vào ảnh đang mở.';
   }
 
   tabs.innerHTML = '';
@@ -140,7 +148,7 @@ async function openCategory(id) {
   const r = await dlg.uxpShowModal({ title: 'GHÉP ÁO – ' + cat.label, resize: 'none', size: { width: 760, height: 660 } });
   loadToken++;
   grid.innerHTML = '';
-  if (r === 'place' && chosen) await placeFile(chosen);
+  if (r === 'place' && chosen) await useFile(chosen);
 }
 
 module.exports = { CATEGORIES, openCategory, chooseRoot, showRoot, getRoot };

@@ -73,7 +73,7 @@ Lệnh mới ghi bằng Photoshop (Actions panel → *Copy As JavaScript*) có t
 | TOOLS | VISA | `external.js` |
 | XẾP ẢNH | 20 bố cục cố định | Tự chuyển từ JSX. Action trong bộ "Tool" được nhúng thẳng vào lệnh |
 | XẾP ẢNH | Nhiều người | `xepanh.js`, giữ nguyên thuật toán xếp |
-| GHÉP ÁO | 10 nhóm | `gallery.js`, đọc thư mục DATA |
+| GHÉP ÁO | 10 nhóm | `gallery.js`, đọc thư mục DATA. Mẫu PSD mở thành tab mới, mẫu PNG đặt thành layer trong ảnh đang mở |
 
 ## Thay đổi và sửa lỗi so với bản CEP
 
