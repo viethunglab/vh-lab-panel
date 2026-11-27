@@ -15,12 +15,15 @@ const { showDialog } = require('./js/core');
 const HOME_URL = 'https://www.facebook.com/hieuanhviethung';
 
 // Lệnh tự sinh từ script cũ: chạy danh sách batchPlay trong steps.js.
-// history=false cho các bố cục XẾP ẢNH vì chúng tạo/đóng tài liệu.
+// Bố cục XẾP ẢNH cũng gộp History trên ảnh nguồn: Photoshop không phải ghi từng bước nên chạy nhanh hơn.
+// Bố cục có bước đóng tài liệu thì không gộp History (tránh đóng tài liệu đang bị tạm dừng History).
+const closesDocs = (id) => (STEPS[id] || []).some((s) => s._obj === 'close');
 function steps(id, label, history) {
-  return { id, label, run: () => { if (requireDocument()) return runSteps(label, STEPS[id], { history: history !== false }); } };
+  const hist = history !== false && !closesDocs(id);
+  return { id, label, run: () => { if (requireDocument()) return runSteps(label, STEPS[id], { history: hist }); } };
 }
 const fn = (id, label, run) => ({ id, label, run });
-const layout = (pairs) => pairs.map(([id, label]) => steps(id, label, false));
+const layout = (pairs) => pairs.map(([id, label]) => steps(id, label));
 
 // style: 'quick' = hàng 5 nút nhấn mạnh; 'feature' = nút lớn cả hàng; 'cards' = thẻ 2 cột; mặc định = lưới 3 cột.
 const PAGES = {

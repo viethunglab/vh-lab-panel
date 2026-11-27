@@ -58,32 +58,45 @@ function errorOf(result) {
   return null;
 }
 
+// Gửi cả loạt bước trong MỘT lần gọi batchPlay (nhanh hơn nhiều so với gọi từng bước: mỗi lần gọi là một
+// lượt trao đổi giữa plugin và Photoshop). batchPlay mặc định dừng ở bước lỗi đầu tiên (continueOnError = false),
+// nên vẫn giữ hành vi của action: dừng khi lỗi hoặc khi người dùng bấm Cancel.
+// Riêng bước có dữ liệu thô (filter Portraiture) chạy tách riêng để có đường lùi.
 async function play(descriptors) {
   const list = Array.isArray(descriptors) ? descriptors : [descriptors];
   const results = [];
-  // Chạy từng bước giống action: dừng ngay khi một bước lỗi hoặc người dùng bấm Cancel.
-  for (const d of list) {
-    let res;
-    if (hasRawData(d)) {
-      // Thử truyền thiết lập đã lưu; nếu Photoshop từ chối (báo lỗi hoặc ném ngoại lệ) thì mở hộp thoại filter.
-      let failed = false;
-      try {
-        res = await action.batchPlay([prepareRaw(d, 'base64')], {});
-        const e0 = errorOf(res);
-        failed = !!e0 && e0.number !== USER_CANCEL;
-      } catch (e) {
-        if (e && e.number === USER_CANCEL) throw e;
-        console.warn('Dữ liệu thô bị từ chối, mở hộp thoại filter:', e);
-        failed = true;
-      }
-      if (failed) res = await action.batchPlay([prepareRaw(d, 'strip')], {});
-    } else {
-      res = await action.batchPlay([d], {});
+  let batch = [];
+  const flush = async () => {
+    if (!batch.length) return;
+    const res = await action.batchPlay(batch, {});
+    for (const r of res) {
+      const err = errorOf(r);
+      if (err) throw err;
+      results.push(r);
     }
+    batch = [];
+  };
+  for (const d of list) {
+    if (!hasRawData(d)) { batch.push(d); continue; }
+    await flush();
+    let res;
+    // Thử truyền thiết lập đã lưu; nếu Photoshop từ chối (báo lỗi hoặc ném ngoại lệ) thì mở hộp thoại filter.
+    let failed = false;
+    try {
+      res = await action.batchPlay([prepareRaw(d, 'base64')], {});
+      const e0 = errorOf(res);
+      failed = !!e0 && e0.number !== USER_CANCEL;
+    } catch (e) {
+      if (e && e.number === USER_CANCEL) throw e;
+      console.warn('Dữ liệu thô bị từ chối, mở hộp thoại filter:', e);
+      failed = true;
+    }
+    if (failed) res = await action.batchPlay([prepareRaw(d, 'strip')], {});
     const err = errorOf(res);
     if (err) throw err;
     results.push(res[0]);
   }
+  await flush();
   return results;
 }
 
