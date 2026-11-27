@@ -56,6 +56,11 @@ tools/
 
 ## Đóng gói và cài đặt .ccx
 
+Bản 4.0.0 đã đóng gói sẵn: `dist/com.viethunglabs.vhlabpanel_PS.ccx` (không đưa lên git, xem `.gitignore`).
+File `.ccx` là file nén ZIP của thư mục `plugin/` (manifest.json ở gốc). Có thể tạo lại bằng UDT như dưới đây,
+hoặc nén thẳng nội dung thư mục `plugin/` rồi đổi đuôi thành `.ccx`. Trước mỗi lần phát hành, tăng `version` trong `manifest.json`.
+
+
 1. Trong UDT, bấm **••• → Package** rồi chọn thư mục lưu. UDT sẽ tạo ra file `com.viethunglabs.vhlabpanel_PS.ccx`.
 2. Trên máy dùng: nhấp đúp file `.ccx`. Creative Cloud Desktop sẽ cài plugin vào Photoshop.
 3. Bản CEP cũ và bản UXP có thể cài song song. Gỡ bản CEP khi bản UXP đã chạy ổn.
