@@ -32,8 +32,8 @@ tools/
 
 - Màu nền, chữ và viền lấy từ theme của Photoshop (Darkest, Dark, Light, Lightest). Chỉ dùng một màu nhấn là vàng champagne: `#d6b06b` khi theme tối, `#9b7432` khi theme sáng.
 - Mỗi tab chia thành các nhóm có tiêu đề nhỏ. Lưới 3 cột. Hàng "Thao tác nhanh" có 5 nút được nhấn mạnh.
-- Ô **Tìm công cụ** lọc nút trong tab đang mở, gõ không dấu cũng tìm được (ví dụ "tang net").
-- Thanh trạng thái ở cuối panel hiện kết quả hoặc lỗi của lệnh vừa chạy, thay cho hộp thông báo bật lên.
+- Dòng trạng thái ngay dưới tab hiện kết quả hoặc lỗi của lệnh vừa chạy, thay cho hộp thông báo bật lên.
+- Toàn panel cuộn bằng con lăn chuột. Không đặt thêm vùng cuộn lồng bên trong (`overflow` trên phần tử con), vì trong Photoshop con lăn không cuộn được vùng đó nếu không giữ Alt.
 - Muốn đổi màu nhấn, sửa biến `--accent` trong `css/style.css`.
 
 ## Chạy thử

@@ -1,4 +1,4 @@
-// Giao diện panel: 3 tab, mỗi tab chia nhóm; ô tìm nhanh lọc công cụ theo tên.
+// Giao diện panel: 3 tab, mỗi tab chia nhóm công cụ.
 'use strict';
 const { shell } = require('uxp');
 const STEPS = require('./js/steps');
@@ -60,8 +60,6 @@ const PAGES = {
   ],
 };
 
-const norm = (s) => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D').toLowerCase();
-
 let busy = false;
 async function runCmd(c, el) {
   if (busy) return;
@@ -94,7 +92,6 @@ function render() {
         el.id = 'cmd-' + c.id;
         el.title = c.label;
         el.tabIndex = 0;
-        el.setAttribute('data-search', norm(c.label + ' ' + s.title));
         const t = document.createElement('span');
         t.className = 'cmd-label';
         t.textContent = c.label;
@@ -109,29 +106,11 @@ function render() {
   }
 }
 
-function applyFilter() {
-  const q = norm(document.getElementById('filter').value.trim());
-  const page = document.querySelector('.page.active');
-  let shown = 0;
-  page.querySelectorAll('.section').forEach((sec) => {
-    let n = 0;
-    sec.querySelectorAll('.cmd').forEach((el) => {
-      const ok = !q || el.getAttribute('data-search').indexOf(q) >= 0;
-      el.style.display = ok ? 'flex' : 'none';
-      if (ok) n++;
-    });
-    sec.style.display = n ? 'flex' : 'none';
-    shown += n;
-  });
-  document.getElementById('empty').style.display = shown ? 'none' : 'flex';
-}
-
 function initTabs() {
   document.querySelectorAll('.tab').forEach((t) => {
     t.addEventListener('click', () => {
       document.querySelectorAll('.tab').forEach((o) => o.classList.toggle('active', o === t));
       document.querySelectorAll('.page').forEach((p) => p.classList.toggle('active', p.id === 'page-' + t.getAttribute('data-tab')));
-      applyFilter();
     });
   });
 }
@@ -150,7 +129,6 @@ document.querySelectorAll('[data-close]').forEach((b) => {
 render();
 initTabs();
 gallery.showRoot();
-document.getElementById('filter').addEventListener('input', applyFilter);
 document.getElementById('gaChangeRoot').addEventListener('click', () => gallery.chooseRoot());
 document.getElementById('brandLink').addEventListener('click', openHome);
 document.getElementById('statusLink').addEventListener('click', openHome);
