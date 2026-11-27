@@ -149,7 +149,10 @@ button.small { height: 24px; font-size: 11px; padding: 0 10px; }
 .msg { font-size: 12px; line-height: 18px; }
 
 /* ---------- Thư viện Ghép áo ---------- */
-.ga-wrap { display: flex; flex-direction: column; height: 100%; }
+/* Kích thước cố định (UXP không co giãn vùng cuộn theo chiều cao hộp thoại):
+   5 cột x 132px + 16px thanh cuộn = 676px, căn giữa trong hộp thoại 760 x 660. */
+.ga-outer { display: flex; flex-direction: row; justify-content: center; width: 100%; }
+.ga-wrap { display: flex; flex-direction: column; width: 676px; }
 .ga-tabs { display: flex; flex-direction: row; flex-wrap: wrap; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
 .ga-tab {
   display: flex; align-items: center; height: 26px; padding: 0 12px; margin: 2px 4px 2px 0;
@@ -157,12 +160,12 @@ button.small { height: 24px; font-size: 11px; padding: 0 10px; }
 }
 .ga-tab:hover { color: var(--text); }
 .ga-tab.active { background-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
-.ga-grid { flex: 1; display: flex; flex-direction: row; flex-wrap: wrap; overflow-y: scroll; min-height: 420px; padding-top: 8px; }
+.ga-grid { display: flex; flex-direction: row; flex-wrap: wrap; align-content: flex-start; height: 470px; overflow-y: scroll; margin-top: 8px; }
 .ga-cell {
-  width: 124px; margin: 4px; padding: 6px; border-radius: 6px; border: 1px solid transparent;
+  width: 124px; height: 146px; margin: 4px; padding: 5px; border-radius: 6px; border: 1px solid transparent;
   background-color: var(--surface); cursor: pointer; display: flex; flex-direction: column; align-items: center;
 }
 .ga-cell:hover { border-color: var(--accent); }
 .ga-cell img { width: 112px; height: 112px; object-fit: contain; }
 .ga-cap { font-size: 10px; color: var(--text-2); margin-top: 4px; text-align: center; width: 112px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-.ga-foot { display: flex; flex-direction: row; justify-content: space-between; align-items: center; margin-top: 8px; }
+.ga-foot { display: flex; flex-direction: row; justify-content: space-between; align-items: center; height: 36px; margin-top: 8px; }

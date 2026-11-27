@@ -54,6 +54,17 @@ async function placeFile(entry) {
 }
 
 let loadToken = 0;
+let wheelReady = false;
+// Cuộn dự phòng như panel chính (lỗi con lăn của Photoshop khi bật "Zoom with Scroll Wheel").
+function initWheel(grid) {
+  if (wheelReady) return;
+  wheelReady = true;
+  grid.addEventListener('wheel', (e) => {
+    const before = grid.scrollTop;
+    const dy = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaY;
+    setTimeout(() => { if (grid.scrollTop === before) grid.scrollTop = before + dy; }, 0);
+  });
+}
 async function openCategory(id) {
   if (!requireDocument()) return;
   const cat = CATEGORIES[id];
@@ -75,12 +86,14 @@ async function openCategory(id) {
   const tabs = $('#gaTabs');
   const grid = $('#gaGrid');
   const status = $('#gaStatus');
+  initWheel(grid);
   let chosen = null;
 
   async function showSub(sub) {
     const my = ++loadToken;
     Array.from(tabs.children).forEach((b) => b.classList.toggle('active', b.getAttribute('data-name') === sub.name));
     grid.innerHTML = '';
+    grid.scrollTop = 0;
     status.textContent = 'Đang tải ' + sub.name + '…';
     const dataDir = (await subFolders(dataRoot)).find((d) => d.name.toLowerCase() === sub.name.toLowerCase());
     const dataFiles = dataDir ? (await dataDir.getEntries()).filter((e) => e.isFile && DATA_EXT.includes(extOf(e.name))) : [];
@@ -124,7 +137,7 @@ async function openCategory(id) {
     tabs.appendChild(b);
   }
   showSub(subs[0]);
-  const r = await dlg.uxpShowModal({ title: 'GHÉP ÁO – ' + cat.label, resize: 'both', size: { width: 760, height: 600 } });
+  const r = await dlg.uxpShowModal({ title: 'GHÉP ÁO – ' + cat.label, resize: 'none', size: { width: 760, height: 660 } });
   loadToken++;
   grid.innerHTML = '';
   if (r === 'place' && chosen) await placeFile(chosen);
