@@ -94,7 +94,7 @@ Lệnh mới ghi bằng Photoshop (Actions panel → *Copy As JavaScript*) có t
 
 - Bỏ khoảng 1.300 file không dùng: preset, script cũ, các tab TAB4/TAB5/index2/index3, file `.rar`, bản sao. Bỏ hẳn các nhóm nút đã comment.
 - Bỏ nút **Reset action** (script rỗng) và **Xuất js** (dùng *Copy As JavaScript* của Photoshop thay thế).
-- Theo yêu cầu, bỏ các nút Trắng da, SkinFiner, Tách tóc, Tăng nét 2, Upscale, Lưu jpg, Auto Contrast, Gộp, Crop (4.0.1: thêm Reset Q-Dir; 4.0.4: thêm Lưu hết – lưu mọi file đang mở thành JPG 01, 02, … vào thư mục chọn, đánh tiếp số nếu thư mục đã có ảnh đánh số, không ghi đè). Tab Công cụ không chia nhóm, giữ thứ tự nút như bản cũ.
+- Theo yêu cầu, bỏ các nút Trắng da, SkinFiner, Tách tóc, Tăng nét 2, Upscale, Lưu jpg, Auto Contrast, Gộp, Crop (4.0.1: thêm Reset Q-Dir; 4.0.5: nút Lưu TT cuối lưới Công cụ – Save As mọi file đang mở thành JPG 01, 02, … vào thư mục chọn, tab chuyển sang file JPG mới như Save As của Photoshop; đánh tiếp số nếu thư mục đã có ảnh đánh số, không ghi đè; file 16/32-bit chuyển 8-bit). Tab Công cụ không chia nhóm, giữ thứ tự nút như bản cũ.
 - Các bố cục XẾP ẢNH không cần nạp bộ action "Tool" nữa. Các bước *Màu nền*, *Tạo viền*, *Flatten* được nhúng thẳng vào lệnh.
 - Các bố cục (CP) 1+6, (CP) 0+8, Can phạm, Can phạm 2, 4x(1+2) và 4x(2+0) không cần preset tài liệu "CP"/"CP2" trên máy nữa. Kích thước được ghi thẳng: CP = 12,7 x 8,6 cm, CP2 = 12,7 x 17,8 cm, 300 PPI.
 - **Crop 10x15**: sửa lỗi mở rộng canvas khi khung crop vượt mép trái hoặc mép trên.
@@ -119,4 +119,4 @@ Lệnh mới ghi bằng Photoshop (Actions panel → *Copy As JavaScript*) có t
 - [ ] GHÉP ÁO: mở cả 10 nhóm, bấm một mẫu PNG và một mẫu PSD.
 - [ ] JPG, PNG, VISA.
 - [ ] Sắp xếp: kéo nút trong từng nhóm, tự cuộn khi kéo sát mép, ẩn/hiện nút bằng con mắt, thứ tự và nút ẩn còn nguyên sau khi tắt mở Photoshop, Mặc định.
-- [ ] Lưu hết: nhiều file (có cả file 16-bit), thư mục trống bắt đầu 01, thư mục đã có 01–03 thì bắt đầu 04.
+- [ ] Lưu TT: nhiều file, tab đổi tên thành 01.jpg, 02.jpg… (có cả file 16-bit), thư mục trống bắt đầu 01, thư mục đã có 01–03 thì bắt đầu 04.

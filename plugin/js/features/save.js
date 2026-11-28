@@ -26,9 +26,11 @@ async function saveCopy(kind) {
   if (ok) toast('Đã lưu ' + file.name);
 }
 
-// Lưu tất cả file đang mở thành JPG (quality 12) vào một thư mục, đặt tên 01.jpg, 02.jpg, … theo thứ tự tab.
-// Thư mục đã có sẵn ảnh đánh số thì đánh tiếp từ số lớn nhất để không ghi đè file cũ.
-// File 16/32-bit (JPG không hỗ trợ): lưu qua bản sao tạm chuyển 8-bit rồi đóng bản sao.
+// Lưu TT (lưu tuần tự): Save As mọi file đang mở thành JPG (quality 12) vào một thư mục, tên 01.jpg, 02.jpg, …
+// theo thứ tự tab. Giống Save As của Photoshop: sau khi lưu, tab chuyển sang file JPG mới.
+// Thư mục đã có ảnh đánh số thì đánh tiếp từ số lớn nhất để không ghi đè file cũ.
+// File 16/32-bit (JPG không hỗ trợ) được chuyển sang 8-bit trước khi lưu.
+// Nếu Photoshop chỉ lưu bản sao (vd. file nhiều layer) thì mở file JPG vừa lưu thành tab mới.
 async function saveAllJpg() {
   const docs = Array.from(app.documents || []);
   if (!docs.length) { toast('Chưa mở ảnh nào.', 'error'); return; }
@@ -44,36 +46,36 @@ async function saveAllJpg() {
   } catch (e) { /* không đọc được danh sách: bắt đầu từ 01 */ }
   const width = Math.max(2, String(start + docs.length - 1).length);
   const pad = (n) => String(n).padStart(width, '0');
+  const opts = { quality: 12, embedColorProfile: true };
 
   const saved = [];
   const failed = [];
-  await runModal('Lưu tất cả JPG', async () => {
+  await runModal('Lưu tuần tự JPG', async () => {
     let n = start;
     for (const doc of docs) {
       const name = pad(n) + '.jpg';
       try {
         const file = await folder.createFile(name, { overwrite: false });
-        try {
-          await doc.saveAs.jpg(file, { quality: 12, embedColorProfile: true }, true);
-        } catch (err) {
-          const tmp = await doc.duplicate();
-          try {
-            tmp.bitsPerChannel = constants.BitsPerChannelType.EIGHT;
-            await tmp.saveAs.jpg(file, { quality: 12, embedColorProfile: true }, true);
-          } finally {
-            await tmp.closeWithoutSaving();
-          }
+        if (doc.bitsPerChannel && doc.bitsPerChannel !== constants.BitsPerChannelType.EIGHT) {
+          doc.bitsPerChannel = constants.BitsPerChannelType.EIGHT;
         }
+        await doc.saveAs.jpg(file, opts, false);
+        // Photoshop chỉ lưu bản sao khi định dạng không giữ được nội dung (layer…): mở file mới cho giống Save As.
+        let renamed = false;
+        try { renamed = String(doc.title || doc.name).toLowerCase() === name; } catch (e) { renamed = false; }
+        if (!renamed) await app.open(file);
         saved.push(name);
         n++;
       } catch (err) {
-        failed.push((doc.title || doc.name) + ': ' + (err && err.message ? err.message : err));
+        let title = '';
+        try { title = doc.title || doc.name; } catch (e) { title = '?'; }
+        failed.push(title + ': ' + (err && err.message ? err.message : err));
       }
     }
   }, { history: false });
 
   if (failed.length) toast('Đã lưu ' + saved.length + ' file vào ' + folder.name + '. Không lưu được:\n' + failed.join('\n'), 'error');
-  else if (saved.length) alertBox('Đã lưu ' + saved.length + ' file (' + saved[0] + ' – ' + saved[saved.length - 1] + ') vào thư mục ' + folder.name + '.', 'Lưu tất cả JPG');
+  else if (saved.length) alertBox('Đã lưu ' + saved.length + ' file (' + saved[0] + ' – ' + saved[saved.length - 1] + ') vào thư mục ' + folder.name + '.', 'Lưu tuần tự');
 }
 
 module.exports = { saveCopy, saveAllJpg };

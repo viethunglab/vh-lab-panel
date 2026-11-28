@@ -37,7 +37,6 @@ const PAGES = {
   tools: [
     { style: 'quick', cmds: [
       steps('cameraraw', 'C-Raw'), fn('RT033', 'JPG', () => save.saveCopy('jpg')), fn('RT051', 'PNG', () => save.saveCopy('png')),
-      Object.assign(fn('SAVEALL', 'Lưu hết', () => save.saveAllJpg()), { title: 'Lưu tất cả file đang mở thành JPG, đặt tên 01, 02, …' }),
       fn('QDIR', 'Reset Q-Dir', () => external.resetQDir()),
     ] },
     { cmds: [
@@ -49,6 +48,7 @@ const PAGES = {
       steps('T13', 'Đẹp da'), steps('T15', 'Tạo viền'), steps('T16', 'Đổ nền'),
       steps('T19', 'Gắn số'), steps('T22', 'Gắn số 2'), fn('T21', 'Đảng viên', () => crop.cropTheDangVien()),
       steps('a46', 'Ám vàng'), steps('a47', 'Ám đỏ'), steps('a48', 'Ám tím'),
+      Object.assign(fn('SAVEALL', 'Lưu TT', () => save.saveAllJpg()), { title: 'Lưu tuần tự: Save As mọi file đang mở thành JPG 01, 02, …' }),
     ] },
   ],
   layout: [
