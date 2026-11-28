@@ -33,6 +33,16 @@ function inlinePlays(steps, id) {
 // này sẽ lỗi -> thay bằng kích thước tường minh (đơn vị point: 1 cm = 72/2.54 pt), 300 PPI, RGB 8 bit, nền trắng.
 const PT = 72 / 2.54;
 const DOC_PRESETS = { CP: [12.7, 8.6], CP2: [12.7, 17.8] };
+// Bản ghi cũ của 2 + 12 (L8) kết thúc bằng bước chọn layer "Layer 0" của ảnh nguồn trong khi tài liệu
+// đang mở là bản xếp ảnh (không có layer đó). CEP bỏ qua lỗi này, UXP thì báo
+// "The command Select is not currently available". Bỏ bước thừa này đi.
+function dropStaleTail(steps, id) {
+  const last = steps[steps.length - 1];
+  if (id === 'L8' && last && (last._obj === 'select' || last._obj === '$slct') && last._target && last._target[0] &&
+      last._target[0]._ref === '$Lyr ' && last._target[0]._name === 'Layer 0') return steps.slice(0, -1);
+  return steps;
+}
+
 function fixPresets(steps, id) {
   return steps.map((s) => {
     const nw = s._obj === '$Mk  ' && s['$Nw  '];
@@ -104,7 +114,7 @@ for (let i = 1; i <= 20; i++) SPEC['L' + i] = 'layout/' + i + '.jsx';
 const result = {};
 for (const [id, src] of Object.entries(SPEC)) {
   const steps = typeof src === 'function' ? src() : conv(src);
-  result[id] = check(useStringEvents(fixLayerCopyOffset(fixPresets(inlinePlays(steps, id), id)), id), id);
+  result[id] = check(useStringEvents(dropStaleTail(fixLayerCopyOffset(fixPresets(inlinePlays(steps, id), id)), id), id), id);
 }
 const header = '// TỰ SINH bởi tools/build_steps.js từ script JSX gốc (nhánh cep-legacy-v3.1). Không sửa tay.\n' +
   '// Mỗi mục là danh sách descriptor batchPlay; "$xxxx" là mã charID của Photoshop.\n';

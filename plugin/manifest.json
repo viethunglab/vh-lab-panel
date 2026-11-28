@@ -2,7 +2,7 @@
   "manifestVersion": 5,
   "id": "com.viethunglabs.vhlabpanel",
   "name": "VH Lab Panel",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "main": "index.html",
   "host": {
     "app": "PS",
