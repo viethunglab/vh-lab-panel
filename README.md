@@ -17,7 +17,7 @@ plugin/                 ← thư mục plugin (UDT nạp và đóng gói thư m�
   scripts/              Reset_QDir.bat (nút Reset Q-Dir)
   js/core.js            executeAsModal + batchPlay, gộp History, báo lỗi
   js/files.js           đọc/ghi file, token cho batchPlay
-  js/arrange.js         chế độ Sắp xếp: kéo thả đổi vị trí nút, lưu thứ tự
+  js/arrange.js         chế độ Sắp xếp: kéo thả đổi vị trí nút, ẩn/hiện nút, lưu trên máy
   js/settings.js        Cài đặt: theme, kích thước nút, hành vi khi chạy lệnh
   js/steps.js           TỰ SINH: lệnh batchPlay chuyển từ script JSX cũ
   js/features/
@@ -38,7 +38,7 @@ tools/
 - Lệnh lỗi sẽ hiện hộp thoại báo lỗi. Lệnh chạy xong không hiện thông báo (chỉ ghi ra console, xem trong UDT → Debug).
 - Panel UXP không tự cuộn, nên `#app` được đặt phủ kín panel và tự cuộn bằng `overflow-y: auto`.
 - Từ Photoshop 27.11, nếu bật Preferences → Tools → *Zoom with Scroll Wheel* thì con lăn chuột không cuộn được panel UXP (phải giữ Alt). Đây là lỗi của Photoshop. `main.js` có đoạn tự cuộn dự phòng; nếu đoạn này vẫn không chạy được, tắt tuỳ chọn trên là con lăn cuộn bình thường.
-- **Sắp xếp nút:** bấm biểu tượng sáu chấm ở góc trên để vào chế độ sắp xếp, kéo nút tới vị trí mới (chỉ trong cùng nhóm; ô viền đứt là chỗ sẽ thả, các nút khác dồn/giãn theo thứ tự), bấm biểu tượng dấu tích để thoát. Trong chế độ này bấm nút không chạy lệnh. Thứ tự lưu trên từng máy (localStorage); "Khôi phục mặc định" trả về thứ tự gốc. Mã nằm ở `js/arrange.js` (tự xử lý sự kiện chuột vì kéo thả HTML5 không chạy ổn định trong UXP).
+- **Sắp xếp nút:** bấm biểu tượng sáu chấm ở góc trên để vào chế độ sắp xếp, kéo nút tới vị trí mới (chỉ trong cùng nhóm; ô viền đứt là chỗ sẽ thả, các nút khác dồn/giãn theo thứ tự), bấm biểu tượng dấu tích để thoát. Trong chế độ này bấm nút không chạy lệnh. Mỗi nút có biểu tượng con mắt: bấm để ẩn/hiện (nút ẩn hiện mờ khi đang sắp xếp, ra khỏi chế độ thì biến mất; nhóm toàn nút ẩn thì ẩn cả nhóm). Thứ tự và nút ẩn lưu trên từng máy (localStorage `vhlab.order.v1`, `vhlab.hidden.v1`); "Mặc định" trả về thứ tự gốc và hiện lại mọi nút. Mã nằm ở `js/arrange.js` (tự xử lý sự kiện chuột vì kéo thả HTML5 không chạy ổn định trong UXP).
 - **Cài đặt** (biểu tượng bánh răng ở góc trên):
   - Màu chủ đạo: Champagne (mặc định), Đại dương, Ngọc bích, Hồng phấn, Oải hương, Đỏ VH, Than chì. Mỗi theme có màu riêng cho giao diện sáng và tối của Photoshop.
   - Kích thước nút: Thường / Gọn.
@@ -94,7 +94,7 @@ Lệnh mới ghi bằng Photoshop (Actions panel → *Copy As JavaScript*) có t
 
 - Bỏ khoảng 1.300 file không dùng: preset, script cũ, các tab TAB4/TAB5/index2/index3, file `.rar`, bản sao. Bỏ hẳn các nhóm nút đã comment.
 - Bỏ nút **Reset action** (script rỗng) và **Xuất js** (dùng *Copy As JavaScript* của Photoshop thay thế).
-- Theo yêu cầu, bỏ các nút Trắng da, SkinFiner, Tách tóc, Tăng nét 2, Upscale, Lưu jpg, Auto Contrast, Gộp, Crop (4.0.1: thêm Reset Q-Dir). Tab Công cụ không chia nhóm, giữ thứ tự nút như bản cũ.
+- Theo yêu cầu, bỏ các nút Trắng da, SkinFiner, Tách tóc, Tăng nét 2, Upscale, Lưu jpg, Auto Contrast, Gộp, Crop (4.0.1: thêm Reset Q-Dir; 4.0.4: thêm Lưu hết – lưu mọi file đang mở thành JPG 01, 02, … vào thư mục chọn, đánh tiếp số nếu thư mục đã có ảnh đánh số, không ghi đè). Tab Công cụ không chia nhóm, giữ thứ tự nút như bản cũ.
 - Các bố cục XẾP ẢNH không cần nạp bộ action "Tool" nữa. Các bước *Màu nền*, *Tạo viền*, *Flatten* được nhúng thẳng vào lệnh.
 - Các bố cục (CP) 1+6, (CP) 0+8, Can phạm, Can phạm 2, 4x(1+2) và 4x(2+0) không cần preset tài liệu "CP"/"CP2" trên máy nữa. Kích thước được ghi thẳng: CP = 12,7 x 8,6 cm, CP2 = 12,7 x 17,8 cm, 300 PPI.
 - **Crop 10x15**: sửa lỗi mở rộng canvas khi khung crop vượt mép trái hoặc mép trên.
@@ -118,4 +118,5 @@ Lệnh mới ghi bằng Photoshop (Actions panel → *Copy As JavaScript*) có t
 - [ ] Crop 10x15 và Đảng viên: chạy với guide và với vùng chọn.
 - [ ] GHÉP ÁO: mở cả 10 nhóm, bấm một mẫu PNG và một mẫu PSD.
 - [ ] JPG, PNG, VISA.
-- [ ] Sắp xếp: kéo nút trong từng nhóm, tự cuộn khi kéo sát mép, thứ tự còn nguyên sau khi tắt mở Photoshop, Khôi phục mặc định.
+- [ ] Sắp xếp: kéo nút trong từng nhóm, tự cuộn khi kéo sát mép, ẩn/hiện nút bằng con mắt, thứ tự và nút ẩn còn nguyên sau khi tắt mở Photoshop, Mặc định.
+- [ ] Lưu hết: nhiều file (có cả file 16-bit), thư mục trống bắt đầu 01, thư mục đã có 01–03 thì bắt đầu 04.

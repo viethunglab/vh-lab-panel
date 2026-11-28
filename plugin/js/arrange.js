@@ -4,6 +4,7 @@
 'use strict';
 
 const ORDER_KEY = 'vhlab.order.v1';
+const HIDDEN_KEY = 'vhlab.hidden.v1';
 const DRAG_THRESHOLD = 4;  // px trước khi coi là kéo
 const EDGE = 36;           // px sát mép trên/dưới thì tự cuộn
 const SCROLL_STEP = 12;
@@ -14,8 +15,38 @@ function loadOrders() {
 function saveOrders(o) {
   try { localStorage.setItem(ORDER_KEY, JSON.stringify(o)); } catch (e) { /* bỏ qua */ }
 }
+// Khôi phục mặc định: thứ tự gốc và hiện lại mọi nút đã ẩn.
 function resetOrders() {
-  try { localStorage.removeItem(ORDER_KEY); } catch (e) { /* bỏ qua */ }
+  try { localStorage.removeItem(ORDER_KEY); localStorage.removeItem(HIDDEN_KEY); } catch (e) { /* bỏ qua */ }
+}
+
+// ---------------- Ẩn / hiện nút ----------------
+// Trong chế độ Sắp xếp mỗi nút có biểu tượng con mắt: bấm để ẩn/hiện. Nút ẩn vẫn thấy (mờ) khi đang sắp xếp
+// để bật lại được, ra khỏi chế độ Sắp xếp thì biến mất hẳn. Nhóm có toàn bộ nút ẩn thì ẩn luôn cả nhóm.
+function loadHidden() {
+  try { return JSON.parse(localStorage.getItem(HIDDEN_KEY) || '[]') || []; } catch (e) { return []; }
+}
+function isHidden(id) { return loadHidden().indexOf(id) >= 0; }
+function setHidden(id, hide) {
+  const list = loadHidden().filter((x) => x !== id);
+  if (hide) list.push(id);
+  try { localStorage.setItem(HIDDEN_KEY, JSON.stringify(list)); } catch (e) { /* bỏ qua */ }
+}
+// Cập nhật cờ "cả nhóm đã ẩn" cho một section.
+function refreshSection(sec) {
+  if (!sec) return;
+  const cmds = Array.from(sec.querySelectorAll('.cmd'));
+  sec.classList.toggle('all-hidden', cmds.length > 0 && cmds.every((c) => c.classList.contains('is-hidden')));
+}
+function toggleHidden(el) {
+  const id = el.getAttribute('data-id');
+  const hide = !el.classList.contains('is-hidden');
+  setHidden(id, hide);
+  el.classList.toggle('is-hidden', hide);
+  el.title = (hide ? 'Đang ẩn – ' : '') + (el.getAttribute('data-label') || '');
+  let sec = el.parentNode;
+  while (sec && !(sec.classList && sec.classList.contains('section'))) sec = sec.parentNode;
+  refreshSection(sec);
 }
 
 // Sắp xếp danh sách lệnh theo thứ tự đã lưu. Nút mới (chưa có trong thứ tự đã lưu) nằm cuối nhóm,
@@ -47,7 +78,7 @@ function setArranging(on) {
   arranging = on;
   document.body.classList.toggle('arranging', on);
   const btn = document.getElementById('btnArrange');
-  if (btn) btn.title = on ? 'Xong – thoát chế độ sắp xếp' : 'Sắp xếp nút (kéo thả để đổi vị trí)';
+  if (btn) btn.title = on ? 'Xong – thoát chế độ sắp xếp' : 'Sắp xếp / ẩn hiện nút';
 }
 
 // ---------------- Kéo thả ----------------
@@ -139,7 +170,10 @@ function onDown(e) {
   if (!arranging || drag) return;
   if (e.button !== undefined && e.button !== 0) return;
   let el = e.target;
-  while (el && !(el.classList && el.classList.contains('cmd'))) el = el.parentNode;
+  while (el && !(el.classList && el.classList.contains('cmd'))) {
+    if (el.classList && el.classList.contains('cmd-eye')) return; // bấm con mắt: không kéo
+    el = el.parentNode;
+  }
   if (!el || !el.parentNode || !el.parentNode.getAttribute('data-group')) return;
   drag = { el, grid: el.parentNode, startX: e.clientX, startY: e.clientY, lastX: e.clientX, lastY: e.clientY, active: false, timer: null };
   if (hasPointer && el.setPointerCapture && e.pointerId !== undefined) {
@@ -183,4 +217,4 @@ function init({ onReset }) {
   });
 }
 
-module.exports = { init, applyOrder, isArranging, resetOrders };
+module.exports = { init, applyOrder, isArranging, resetOrders, isHidden, toggleHidden, refreshSection };

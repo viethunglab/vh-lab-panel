@@ -12,6 +12,10 @@ const arrange = require('./js/arrange');
 const settings = require('./js/settings');
 const { showDialog } = require('./js/core');
 
+const EYE_SVG =
+  '<svg class="eye-on" width="12" height="12" viewBox="0 0 12 12"><path d="M1 6 C2.5 3 4.2 2 6 2 C7.8 2 9.5 3 11 6 C9.5 9 7.8 10 6 10 C4.2 10 2.5 9 1 6 Z" fill="none" stroke-width="1.2"/><circle cx="6" cy="6" r="1.7"/></svg>' +
+  '<svg class="eye-off" width="12" height="12" viewBox="0 0 12 12"><path d="M1 6 C2.5 3 4.2 2 6 2 C7.8 2 9.5 3 11 6 C9.5 9 7.8 10 6 10 C4.2 10 2.5 9 1 6 Z" fill="none" stroke-width="1.2"/><path d="M1.5 10.5 L10.5 1.5" fill="none" stroke-width="1.4" stroke-linecap="round"/></svg>';
+
 const HOME_URL = 'https://www.facebook.com/hieuanhviethung';
 
 // Lệnh tự sinh từ script cũ: chạy danh sách batchPlay trong steps.js.
@@ -33,6 +37,7 @@ const PAGES = {
   tools: [
     { style: 'quick', cmds: [
       steps('cameraraw', 'C-Raw'), fn('RT033', 'JPG', () => save.saveCopy('jpg')), fn('RT051', 'PNG', () => save.saveCopy('png')),
+      Object.assign(fn('SAVEALL', 'Lưu hết', () => save.saveAllJpg()), { title: 'Lưu tất cả file đang mở thành JPG, đặt tên 01, 02, …' }),
       fn('QDIR', 'Reset Q-Dir', () => external.resetQDir()),
     ] },
     { cmds: [
@@ -97,18 +102,28 @@ function render() {
         el.className = 'cmd';
         el.id = 'cmd-' + c.id;
         el.setAttribute('data-id', c.id);
-        el.title = c.label;
+        el.setAttribute('data-label', c.title || c.label);
+        el.title = c.title || c.label;
         el.tabIndex = 0;
         const t = document.createElement('span');
         t.className = 'cmd-label';
         t.textContent = c.label;
         el.appendChild(t);
+        // Con mắt ẩn/hiện nút (chỉ thấy trong chế độ Sắp xếp).
+        const eye = document.createElement('span');
+        eye.className = 'cmd-eye';
+        eye.title = 'Ẩn / hiện nút này';
+        eye.innerHTML = EYE_SVG;
+        eye.addEventListener('click', (e) => { e.stopPropagation(); arrange.toggleHidden(el); });
+        el.appendChild(eye);
+        if (arrange.isHidden(c.id)) { el.classList.add('is-hidden'); el.title = 'Đang ẩn – ' + el.title; }
         el.addEventListener('click', () => runCmd(c, el));
         el.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') runCmd(c, el); });
         grid.appendChild(el);
       }
       sec.appendChild(grid);
       host.insertBefore(sec, anchor);
+      arrange.refreshSection(sec);
     });
   }
 }

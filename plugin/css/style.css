@@ -89,7 +89,7 @@ body {
   flex: 0 0 31.33%; height: 28px; margin: 1%; padding: 0 2px;
   background-color: var(--surface); color: var(--text);
   border: 1px solid transparent; border-radius: var(--radius);
-  cursor: pointer; overflow: hidden;
+  cursor: pointer; overflow: hidden; position: relative;
 }
 .cmd:hover { background-color: var(--surface-hover); border-color: var(--line); }
 .cmd:focus { border-color: var(--accent); }
@@ -127,6 +127,26 @@ body.arranging .cmd:hover { border-color: var(--accent); }
 body.arranging .cmd.dragging { background-color: transparent; border: 1px dashed var(--accent); }
 body.arranging .cmd.dragging .cmd-label { opacity: 0; }
 body.drag-active .cmd:hover { border-color: var(--line); }
+/* Ẩn / hiện nút: con mắt ở góc phải, chỉ hiện khi đang sắp xếp */
+.cmd-eye {
+  display: none; position: absolute; top: 0; right: 0; width: 16px; height: 100%;
+  align-items: center; justify-content: center; cursor: pointer;
+}
+.cmd-eye svg { stroke: var(--text-2); fill: var(--text-2); }
+.cmd-eye .eye-off { display: none; }
+.cmd-eye:hover svg { stroke: var(--accent); fill: var(--accent); }
+body.arranging .cmd-eye { display: flex; }
+body.arranging .cmd { padding-right: 14px; }
+body.arranging .cmd.is-hidden { opacity: 0.4; border-style: dotted; }
+body.arranging .cmd.is-hidden .eye-on { display: none; }
+body.arranging .cmd.is-hidden .eye-off { display: flex; }
+body.arranging .cmd.dragging .cmd-eye { display: none; }
+.drag-ghost .cmd-eye { display: none; }
+/* Ngoài chế độ Sắp xếp: nút ẩn và nhóm toàn nút ẩn biến mất (không dùng :not cho chắc với UXP) */
+.cmd.is-hidden { display: none; }
+.section.all-hidden { display: none; }
+body.arranging .cmd.is-hidden { display: flex; }
+body.arranging .section.all-hidden { display: flex; }
 /* Bản sao đi theo con trỏ */
 .drag-ghost {
   position: absolute; margin: 0; pointer-events: none; opacity: 0.85;
